@@ -1,0 +1,52 @@
+[alias]
+  blog = "log origin/master... --left-right"
+  br = branch
+  ci = commit
+  ci = duet-commit
+  co = checkout
+  di = diff
+  drb = rebase -i --exec 'git commit --amend --reset-author'
+  drb = rebase -i --exec 'git duet-commit --amend --reset-author'
+  ds = "diff --staged"
+  fixup = "commit --fixup"
+  flog = "log --pretty=fuller --decorate"
+  lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+  llog = "log --date=local"
+  lol = "log --graph --decorate --oneline"
+  lola = "log --graph --decorate --oneline --all"
+  rum = "rebase master@{u}"
+  squash = "commit --squash"
+  st = status
+  sta = stash
+  su = submodule update --init --recursive
+  unstage = "reset HEAD"
+[core]
+  editor = nvim
+  excludesfile = ~/.shared-gitignore
+[url "git@gist.github.com:"]
+  pushInsteadOf = https://gist.github.com/
+  pushInsteadOf = git://gist.github.com/
+[url "git@github.com:"]
+  pushInsteadOf = https://github.com/
+  pushInsteadOf = git://github.com/
+[push]
+  default = simple
+  recurseSubmodules = check
+[submodule]
+  fetchJobs = 6
+[diff]
+  compactionHeuristic = true
+[status]
+  submoduleSummary = true
+[secrets]
+	patterns = AKIA[A-Z0-9]{16}
+	patterns = (\"|')?(AWS|aws|Aws)?_?(SECRET|secret|Secret)?_?(ACCESS|access|Access)?_?(KEY|key|Key)(\"|')?\\s*(:|=>|=)\\s*(\"|')?[A-Za-z0-9/\\+=]{40}(\"|')?
+	patterns = (\"|')?(AWS|aws|Aws)?_?(ACCOUNT|account|Account)_?(ID|id|Id)?(\"|')?\\s*(:|=>|=)\\s*(\"|')?[0-9]{4}\\-?[0-9]{4}\\-?[0-9]{4}(\"|')?
+	patterns = (\"|')*[A-Za-z0-9_-]*([sS]ecret|[pP]rivate[-_]?[Kk]ey|[Pp]assword|[sS]alt|SECRET|PRIVATE[-_]?KEY|PASSWORD|SALT)[\"']*\\s*(=|:|\\s|:=|=>)\\s*[\"'][A-Za-z0-9.$+=&\\/_\\\\-]{12,}(\"|')
+	allowed = [\"]\\$
+	allowed = [fF][aA][kK][eE]
+	allowed = [eE][xX][aA][mM][pP][lL][eE]
+  allowed = REPLACE
+[user]
+	email = cf-networking@pivotal.io
+	name = CF Networking Team
