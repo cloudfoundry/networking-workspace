@@ -1,0 +1,7 @@
+---
+- type: replace
+  path: /releases/name=routing
+  value:
+    name: routing
+    url: file:///Users/pivotal/workspace/routing-release
+    version: create
