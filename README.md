@@ -71,4 +71,4 @@ To load iTerm preferences, point to this directory under `iTerm2` >
 - remote pair with [ssh+tmux+zoom](./REMOTE_PAIRING.md)
 
 ## repositories
-a full list can be found [here]()
+a full list can be found [here](https://github.com/cloudfoundry/networking-workspace/blob/f557eb2313a9810fad01fe16dfcdde4eb6560f33/install.sh#L276)
