@@ -4,7 +4,6 @@
   ci = duet-commit
   co = checkout
   di = diff
-  drb = rebase -i --exec 'git commit --amend --reset-author'
   drb = rebase -i --exec 'git duet-commit --amend --reset-author'
   ds = "diff --staged"
   fixup = "commit --fixup"
