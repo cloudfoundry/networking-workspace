@@ -1,4 +1,8 @@
-# Remote pairing with ngrok + tmux
+# Remote pairing
+
+We generally SSH into each other's machines using plain old `ssh` or tmate.
+
+Alternatively, you can use ngrok + tmux:
 
 ## Host
 
