@@ -22,6 +22,7 @@ dakota
 lyon
 bayside
 vicente
+haight
 [other machines you might want to add]
 
 LA:
@@ -30,6 +31,9 @@ crenshaw
 doheny
 amherst
 victory
+imperial
+corley
+larchmont
 
 Happy to answer any follow up questions you might have.
 
