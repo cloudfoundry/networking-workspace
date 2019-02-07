@@ -76,3 +76,10 @@ To load iTerm preferences, point to this directory under `iTerm2` >
 
 ## repositories
 a full list can be found [here](https://github.com/cloudfoundry/networking-workspace/commit/0d7b5ab04a81b716626ed4f63aacd6ee67aff1df#diff-3fbb47e318cd8802bd325e7da9aaabe8R276)
+
+# Troubleshooting
+
+## Both Co-Authored-By and Signed-Off-By in commit message
+
+You must manually remove the `/.git/hooks/prepare-commit-msg` file in each repo
+and then run `git init` to complete opting out of using `Co-Authored-By`.
