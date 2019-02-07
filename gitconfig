@@ -1,7 +1,6 @@
 [alias]
   blog = "log origin/master... --left-right"
   br = branch
-  ci = commit
   ci = duet-commit
   co = checkout
   di = diff
