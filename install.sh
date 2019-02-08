@@ -361,7 +361,7 @@ all_the_repos() {
   clone_if_not_exist "https://github.com/cf-routing/zero-downtime-release" "${HOME}/workspace/zero-downtime-release"
 
   # Pem Librarian: locates and stows pems for Istio/Copilot
-  clone_if_not_exist "https://github.com/cloudfoundry/pem-librarian" "${GOPATH}/src/code.cloudfoundry.org/pem-librarian"
+  clone_if_not_exist "git@github.com:cloudfoundry/pem-librarian" "${GOPATH}/src/code.cloudfoundry.org/pem-librarian"
 
   # Diego Release: BOSH release for container scheduling for Cloud Foundry Runtime
   clone_if_not_exist "https://github.com/cloudfoundry/diego-release" "${HOME}/workspace/diego-release"
