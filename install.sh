@@ -288,6 +288,9 @@ all_the_repos() {
   # Routing Team Checklists: Checklists (on-call, onboarding) and a kind of helpful wiki
   clone_if_not_exist "git@github.com:cloudfoundry/routing-team-checklists" "${HOME}/workspace/routing-team-checklists"
 
+  # Networking Program Checklists: Checklists (on-call, onboarding) and a kind of helpful wiki
+  clone_if_not_exist "git@github.com:cloudfoundry/networking-program-checklists" "${HOME}/workspace/networking-program-checklists"
+
   # Bosh Deployment: We usually use this to bump golang in our releases
   clone_if_not_exist "https://github.com/cloudfoundry/bosh-deployment" "${HOME}/workspace/bosh-deployment"
 

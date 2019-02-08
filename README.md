@@ -52,8 +52,9 @@ on a freshly imaged machine:
   sudo xcodebuild -license  # follow the interactive prompts
   mkdir -p ~/workspace
   cd ~/workspace
-  git clone https://github.com/cf-routing/workspace routing-workspace
-  cd routing-workspace
+  git clone https://github.com/cloudfoundry/networking-workspace
+  networking-workspace
+  cd networking-workspace
   ./install.sh
   ```
 
