@@ -279,6 +279,9 @@ all_the_repos() {
   # Deployments Routing:  Pipelines, environment info, helpful scripts
   clone_if_not_exist "git@github.com:cloudfoundry/deployments-routing" "${HOME}/workspace/deployments-routing"
 
+  # CF Networking Deployments: Private manifests and credentials for C2C CI
+  clone_if_not_exist "git@github.com:cloudfoundry/cf-networking-deployments" "${HOME}/workspace/cf-networking-deployments"
+
   # Routing Datadog Config: Configure your Data 🐶
   clone_if_not_exist "git@github.com:cloudfoundry/routing-datadog-config" "${HOME}/workspace/routing-datadog-config"
 
@@ -290,6 +293,9 @@ all_the_repos() {
 
   # CF Deployment: We use it to deploy Cloud Foundries
   clone_if_not_exist "https://github.com/cloudfoundry/cf-deployment" "${HOME}/workspace/cf-deployment"
+
+  # CF Deployment Concourse Tasks: We use it to deploy Concourses
+  clone_if_not_exist "https://github.com/cloudfoundry/cf-deployment-concourse-tasks" "${HOME}/workspace/cf-deployment-concourse-tasks"
 
   # CF Acceptance Test: 🐱 🐱  or CATS. Happy path integration tests for CF
   clone_if_not_exist "https://github.com/cloudfoundry/cf-acceptance-tests" "${GOPATH}/src/code.cloudfoundry.org/cf-acceptance-tests"
@@ -314,6 +320,18 @@ all_the_repos() {
 
   # Routing CI: Scripts and tasks for the Routing Concourse CI
   clone_if_not_exist "https://github.com/cloudfoundry/routing-ci" "${HOME}/workspace/routing-ci"
+
+  # CF Networking CI: the DEPRECATED CI repo for Container Networking Release CI
+  clone_if_not_exist "https://github.com/cloudfoundry/cf-networking-ci" "${HOME}/workspace/cf-networking-ci"
+
+  # Toque Scaling: Scaling tests in the C2c CI
+  clone_if_not_exist "https://github.com/cf-container-networking/toque-scaling" "${HOME}/workspace/toque-scaling"
+
+  # Toque Test Helpers: Fixtures for the toque scaling tests
+  clone_if_not_exist "https://github.com/cf-container-networking/toque-test-helpers" "${HOME}/workspace/toque-test-helpers"
+
+  # CF Networking Release: BOSH release for policy-based container networking in Cloud Foundry
+  clone_if_not_exist "https://github.com/cloudfoundry/cf-networking-release" "${HOME}/workspace/cf-networking-release"
 
   # Routing Perf Release: Used to run performance tests against Routing Release
   clone_if_not_exist "https://github.com/cloudfoundry/routing-perf-release" "${GOPATH}/src/code.cloudfoundry.org/routing-perf-release"
@@ -340,25 +358,22 @@ all_the_repos() {
   clone_if_not_exist "https://github.com/cf-routing/zero-downtime-release" "${HOME}/workspace/zero-downtime-release"
 
   # Pem Librarian: locates and stows pems for Istio/Copilot
-  clone_if_not_exist "git@github.com:cloudfoundry/pem-librarian" "${GOPATH}/src/code.cloudfoundry.org/pem-librarian"
+  clone_if_not_exist "https://github.com/cloudfoundry/pem-librarian" "${GOPATH}/src/code.cloudfoundry.org/pem-librarian"
 
-  # TODO: add descriptions and github locations for C2C repos
-  #   - cf-container-networking/toque-scaling
-  #   - cf-container-networking/toque-test-helpers
-  #   - cloudfoundry/bosh-deployment
-  #   - cloudfoundry/cf-deployment
-  #   - cloudfoundry/cf-deployment-concourse-tasks
-  #   - cloudfoundry/cf-networking-deployments
-  #   - cloudfoundry/cf-release
-  #   - cloudfoundry/diego-release
-  #   - cloudfoundry/capi-release
-  #   - cloudfoundry/cf-acceptance-tests
-  #   - cloudfoundry/garden-runc-release
-  #   - cloudfoundry/cf-networking-ci
-  #   - cloudfoundry/cf-networking-release
-  #   - cloudfoundry-incubator/routing-release
-  #   - cloudfoundry/silk (clone to code.cloudfoundry.org)
-  #   - cloudfoundry/cf-networking-helpers
+  # Diego Release: BOSH release for container scheduling for Cloud Foundry Runtime
+  clone_if_not_exist "https://github.com/cloudfoundry/diego-release" "${HOME}/workspace/diego-release"
+
+  # Capi Release: BOSH release for the Cloud Controller API
+  clone_if_not_exist "https://github.com/cloudfoundry/capi-release" "${HOME}/workspace/capi-release"
+
+  # Garden RunC Release: BOSH release for Garden RunC
+  clone_if_not_exist "https://github.com/cloudfoundry/garden-runc-release" "${HOME}/workspace/garden-runc-release"
+
+  # Silk: Open-source, CNI-compatible container networking fabric
+  clone_if_not_exist "https://github.com/cloudfoundry/silk" "${GOPATH}/src/code.cloudfoundry.org/silk"
+
+  # Cf Networking Helpers: Helpers for running tests?
+  clone_if_not_exist "https://github.com/cloudfoundry/cf-networking-helpers" "${HOME}/workspace/cf-networking-helpers"
 
   # Pivotal Only ==============================================================================================
 
