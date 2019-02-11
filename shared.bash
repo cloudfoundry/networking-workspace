@@ -623,8 +623,8 @@ function create_service_account_key_for_toolsmiths_env() {
 
   local story_id="${1}"
   local service_account_name="opsman-${story_id}"
-  local service_account_email="${service_account_name}@cf-container-networking-gcp.iam.gserviceaccount.com"
-  local gcp_project_name="cf-container-networking-gcp"
+  local gcp_project_name="$(gcloud config get-value project)"
+  local service_account_email="${service_account_name}@${gcp_project_name}.iam.gserviceaccount.com"
   local key_file_name="$(mktemp)"
 
   gcloud iam service-accounts create "${service_account_name}" \
