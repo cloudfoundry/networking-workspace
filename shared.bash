@@ -648,7 +648,8 @@ function remove_service_account_key_for_toolsmiths_env() {
   fi
 
   local story_id="${1}"
-  local service_account_email="opsman-${story_id}@cf-container-networking-gcp.iam.gserviceaccount.com"
+  local gcp_project_name="$(gcloud config get-value project)"
+  local service_account_email="opsman-${story_id}@${gcp_project_name}.iam.gserviceaccount.com"
 
   gcloud iam service-accounts delete "${service_account_email}"
 }
