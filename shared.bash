@@ -653,3 +653,134 @@ function remove_service_account_key_for_toolsmiths_env() {
 
   gcloud iam service-accounts delete "${service_account_email}"
 }
+
+function pull_if_no_dirty_changes(){
+  echo "Pulling ${1}..."
+  local dirty_changes="$(git -C ${1} status --porcelain)"
+  local unpushed_commits="$(git -C ${1} lg origin..)"
+  if [[ -z "${dirty_changes}" && -z "${unpushed_commits}" ]]; then
+    git -C "${1}" pull
+  else
+    echo "Not pulling ${1} since it has local work"
+  fi
+}
+
+function good_morning(){
+  echo "Pulling all the repos..."
+
+  # Deployments Routing:  Pipelines, environment info, helpful scripts
+  pull_if_no_dirty_changes "${HOME}/workspace/deployments-routing"
+
+  # CF Networking Deployments: Private manifests and credentials for C2C CI
+  pull_if_no_dirty_changes "${HOME}/workspace/cf-networking-deployments"
+
+  # Routing Datadog Config: Configure your Data 🐶
+  pull_if_no_dirty_changes "${HOME}/workspace/routing-datadog-config"
+
+  # Routing Team Checklists: Checklists (on-call, onboarding) and a kind of helpful wiki
+  pull_if_no_dirty_changes "${HOME}/workspace/routing-team-checklists"
+
+  # Networking Program Checklists: Checklists (on-call, onboarding) and a kind of helpful wiki
+  pull_if_no_dirty_changes "${HOME}/workspace/networking-program-checklists"
+
+  # Bosh Deployment: We usually use this to bump golang in our releases
+  pull_if_no_dirty_changes "${HOME}/workspace/bosh-deployment"
+
+  # CF Deployment: We use it to deploy Cloud Foundries
+  pull_if_no_dirty_changes "${HOME}/workspace/cf-deployment"
+
+  # CF Deployment Concourse Tasks: We use it to deploy Concourses
+  pull_if_no_dirty_changes "${HOME}/workspace/cf-deployment-concourse-tasks"
+
+  # CF Acceptance Test: 🐱 🐱  or CATS. Happy path integration tests for CF
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/cf-acceptance-tests"
+
+  # CF Smoke Tests: Quick test that pretty much just pushes an app to verify a successful deployment of CF
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/cf-smoke-tests"
+
+  # NATS Release: Inherited from Release Integration. We now own this release, which deploys NATS, which is used in CF
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/nats-release"
+
+  # Istio Acceptance Tests: Used to verify Cloud Foundry integration with Istio using real environments and real components
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/istio-acceptance-tests"
+
+  # Istio Release: BOSH release used to deploy Istio, Envoy, Copilot
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/istio-release"
+
+  # Istio Workspace: Use this if you want to work outside of your GOPATH and spin up a Vagrant VM for testing (see istio_docker())
+  pull_if_no_dirty_changes "${HOME}/workspace/istio-workspace"
+
+  # Routing API CLI: Used to interact with the Routing API, which can be found in Routing Release
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/routing-api-cli"
+
+  # Routing CI: Scripts and tasks for the Routing Concourse CI
+  pull_if_no_dirty_changes "${HOME}/workspace/routing-ci"
+
+  # CF Networking CI: the DEPRECATED CI repo for Container Networking Release CI
+  pull_if_no_dirty_changes "${HOME}/workspace/cf-networking-ci"
+
+  # Toque Scaling: Scaling tests in the C2c CI
+  pull_if_no_dirty_changes "${HOME}/workspace/toque-scaling"
+
+  # Toque Test Helpers: Fixtures for the toque scaling tests
+  pull_if_no_dirty_changes "${HOME}/workspace/toque-test-helpers"
+
+  # CF Networking Release: BOSH release for policy-based container networking in Cloud Foundry
+  pull_if_no_dirty_changes "${HOME}/workspace/cf-networking-release"
+
+  # Routing Perf Release: Used to run performance tests against Routing Release
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/routing-perf-release"
+
+  # Routing Release: BOSH Release home to the Gorouter, TCP router, and a bunch of other routing related things. Spelunk! Refactor!
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/routing-release"
+
+  # Routing Sample Apps: Mostly used by developers and PMs for debugging and acceptance. If you don't see what you need, make it and add extensive documentation.
+  pull_if_no_dirty_changes "${HOME}/workspace/routing-sample-apps"
+
+  # Docs Book CloudFoundry: You'll need this if you want to make any documentation changes for the Cloud Foundry docs site.
+  pull_if_no_dirty_changes "${HOME}/workspace/docs-book-cloudfoundry"
+
+  # Docs Running CF: You'll need this if you want to run a docs site locally to make sure your changes are OK.
+  pull_if_no_dirty_changes "${HOME}/workspace/docs-running-cf"
+
+  # Istio Scaling: Used to test the scalability of Istio in a Cloud Foundry deployment
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/istio-scaling"
+
+  # Community Bot: an ever changing tool to help with our community responsibilities
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/cf-routing/community-bot"
+
+  # Zero Downtime Release: BOSH release for testing app availability
+  pull_if_no_dirty_changes "${HOME}/workspace/zero-downtime-release"
+
+  # Diego Release: BOSH release for container scheduling for Cloud Foundry Runtime
+  pull_if_no_dirty_changes "${HOME}/workspace/diego-release"
+
+  # Capi Release: BOSH release for the Cloud Controller API
+  pull_if_no_dirty_changes "${HOME}/workspace/capi-release"
+
+  # Garden RunC Release: BOSH release for Garden RunC
+  pull_if_no_dirty_changes "${HOME}/workspace/garden-runc-release"
+
+  # Silk: Open-source, CNI-compatible container networking fabric
+  pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/silk"
+
+  # Cf Networking Helpers: Helpers for running tests?
+  pull_if_no_dirty_changes "${HOME}/workspace/cf-networking-helpers"
+
+  # Pivotal Only ==============================================================================================
+
+  # Routing Support Notes: List of support tickets, past and present, and a handy template to start your own.
+  pull_if_no_dirty_changes "${HOME}/workspace/routing-support-notes"
+
+  # Scripts for generating Istio config for PKS Routing
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/k8s-istio-resource-generator"
+
+  # PKS Routing Controller
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pks-routing-controller"
+
+  # Pivotal Routing CI -- pipeline and tasks for pivotal ci
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pivotal-routing-ci"
+
+  # Routing Environments State -- env info for pivotal ci
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/routing-environments-state"
+}
