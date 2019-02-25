@@ -781,6 +781,6 @@ function good_morning(){
   # Pivotal Networking CI -- pipeline and tasks for pivotal ci
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pivotal-networking-ci"
 
-  # Routing Environments State -- env info for pivotal ci
-  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/routing-environments-state"
+  # PKS Networking Env Metadata-- env info for pivotal ci
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pks-networking-env-metadata"
 }

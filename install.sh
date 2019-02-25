@@ -389,8 +389,8 @@ all_the_repos() {
   # Pivotal Networking CI -- pipeline and tasks for pivotal ci
   clone_if_not_exist "git@github.com:pivotal/pivotal-networking-ci" "${GOPATH}/src/github.com/pivotal/pivotal-networking-ci"
 
-  # Routing Environments State -- env info for pivotal ci
-  clone_if_not_exist "git@github.com:pivotal/routing-environments-state" "${GOPATH}/src/github.com/pivotal/routing-environments-state"
+  # PKS Networking Env Metadata -- env info for pivotal ci
+  clone_if_not_exist "git@github.com:pivotal/pks-networking-env-metadata" "${GOPATH}/src/github.com/pivotal/pks-networking-env-metadata"
 }
 
 main "$@"
