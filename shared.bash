@@ -775,11 +775,11 @@ function good_morning(){
   # Scripts for generating Istio config for PKS Routing
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/k8s-istio-resource-generator"
 
-  # PKS Routing Controller
-  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pks-routing-controller"
+  # PKS service mesh
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pks-service-mesh"
 
-  # Pivotal Routing CI -- pipeline and tasks for pivotal ci
-  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pivotal-routing-ci"
+  # Pivotal Networking CI -- pipeline and tasks for pivotal ci
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pivotal-networking-ci"
 
   # Routing Environments State -- env info for pivotal ci
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/routing-environments-state"
