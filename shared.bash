@@ -275,6 +275,16 @@ set-git-keys() {
   set_key ${hours}
 }
 
+function pks_login() {
+  local environment=$1
+
+  local pks_api=$(jq -r .pks_api.url $HOME/go/src/github.com/pivotal/pks-networking-env-metadata/$environment/metadata.json)
+  local pks_user=$(jq -r .pks_api.uaa_admin_user $HOME/go/src/github.com/pivotal/pks-networking-env-metadata/$environment/metadata.json)
+  local pks_password=$(jq -r .pks_api.uaa_admin_password $HOME/go/src/github.com/pivotal/pks-networking-env-metadata/$environment/metadata.json)
+
+  pks login -a $pks_api -u $pks_user -p $pks_password --skip-ssl-validation
+}
+
 function current_branch() { # Gets current branch
   git rev-parse --abbrev-ref HEAD
 }
