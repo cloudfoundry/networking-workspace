@@ -802,9 +802,11 @@ function create_and_sign_cert_with_fake_ca() {
 }
 
 function forever() {
+  c=0
   while true
   do
-    echo "Running..."
+    c=$((c+1))
+    echo "Run #$c"
     $@
     sleep 0.5
   done
