@@ -794,3 +794,9 @@ function good_morning(){
   # PKS Networking Env Metadata-- env info for pivotal ci
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pks-networking-env-metadata"
 }
+
+function create_and_sign_cert_with_fake_ca() {
+  certstrap init --common-name fake_ca
+  certstrap request-cert --common-name $1.routing.cf-app.com
+  certstrap sign --CA fake_ca --expires "100 years" $1.routing.cf-app.com
+}
