@@ -800,3 +800,12 @@ function create_and_sign_cert_with_fake_ca() {
   certstrap request-cert --common-name $1.routing.cf-app.com
   certstrap sign --CA fake_ca --expires "100 years" $1.routing.cf-app.com
 }
+
+function forever() {
+  while true
+  do
+    echo "Running..."
+    $@
+    sleep 0.5
+  done
+}
