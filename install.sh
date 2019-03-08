@@ -340,7 +340,7 @@ all_the_repos() {
   clone_if_not_exist "https://github.com/cloudfoundry/routing-perf-release" "${GOPATH}/src/code.cloudfoundry.org/routing-perf-release"
 
   # Routing Release: BOSH Release home to the Gorouter, TCP router, and a bunch of other routing related things. Spelunk! Refactor!
-  clone_if_not_exist "https://github.com/cloudfoundry/routing-release" "${GOPATH}/src/code.cloudfoundry.org/routing-release"
+  clone_if_not_exist "https://github.com/cloudfoundry/routing-release" "${HOME}/workspace/routing-release"
 
   # Routing Sample Apps: Mostly used by developers and PMs for debugging and acceptance. If you don't see what you need, make it and add extensive documentation.
   clone_if_not_exist "https://github.com/cloudfoundry/routing-sample-apps" "${HOME}/workspace/routing-sample-apps"
