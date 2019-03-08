@@ -1,5 +1,4 @@
 tap 'caskroom/cask'
-tap 'caskroom/versions'
 tap 'cloudfoundry/tap'
 tap 'git-duet/tap'
 tap 'homebrew/bundle'
