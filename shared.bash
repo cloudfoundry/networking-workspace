@@ -29,6 +29,8 @@ main() {
 
     alias h?="history | grep"
     alias chg="credhub_get"
+
+    alias local_ginkgo="/Users/pivotal/go/bin/ginkgo"
   }
 
   setup_environment() {
@@ -811,3 +813,4 @@ function forever() {
     sleep 0.5
   done
 }
+
