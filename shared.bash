@@ -395,7 +395,6 @@ cf_target() {
     return
   fi
   env=$1
-  workspace=$2
 
   if [ "$env" = "ci" ]; then
     echo "no CF deployed in ci env."
@@ -406,6 +405,10 @@ cf_target() {
     password=$(grep cf_admin_password "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
   else
     password=$(credhub get -n "/bosh-${env}/cf/cf_admin_password" | bosh int --path /value -)
+  fi
+
+  if [[ "$(lookup_env ${1})" = "${HOME}/workspace/deployments-routing/${1}/bbl-state" ]]; then
+    workspace="routing"
   fi
 
   if [ "$workspace" = "routing" ]; then
@@ -441,20 +444,37 @@ gobosh_target() {
     return
   fi
 
-  workspace=$2
-  if [ "$workspace" = "pcf" ]; then
-    export BOSH_DIR=~/workspace/pcf-networking-deployments/environments/$BOSH_ENV
-  elif [ "$workspace" = "routing" ]; then
-    export BOSH_DIR=~/workspace/deployments-routing/$BOSH_ENV/bbl-state
-  else
-    export BOSH_DIR=~/workspace/cf-networking-deployments/environments/$BOSH_ENV
-  fi
+  export BOSH_DIR="$(lookup_env $BOSH_ENV)"
 
   pushd $BOSH_DIR 1>/dev/null
       eval "$(bbl print-env)"
   popd 1>/dev/null
 
   export BOSH_DEPLOYMENT="cf"
+}
+
+lookup_env() {
+  local name=${1}
+  ls ~/workspace/pcf-networking-deployments/environments/${1} > /dev/null 2>&1
+  exit_code=${?}
+  if [[ $exit_code -eq 0 ]]; then
+    echo "${HOME}/workspace/pcf-networking-deployments/environments/$1"
+    return
+  fi
+
+  ls ~/workspace/deployments-routing/$1/bbl-state > /dev/null 2>&1
+  exit_code=$?
+  if [[ $exit_code -eq 0 ]]; then
+    echo "${HOME}/workspace/deployments-routing/$1/bbl-state"
+    return
+  fi
+
+  ls ~/workspace/cf-networking-deployments/environments/$1 > /dev/null 2>&1
+  exit_code=$?
+  if [[ $exit_code -eq 0 ]]; then
+    echo "${HOME}/workspace/cf-networking-deployments/environments/$1"
+    return
+  fi
 }
 
 gobosh_untarget() {
