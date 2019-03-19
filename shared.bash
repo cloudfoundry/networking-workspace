@@ -287,6 +287,11 @@ function pks_login() {
   pks login -a $pks_api -u $pks_user -p $pks_password --skip-ssl-validation
 }
 
+function pks_metadata() {
+  local environment=$1
+  cat $HOME/go/src/github.com/pivotal/pks-networking-env-metadata/$environment/metadata.json | jq .
+}
+
 function current_branch() { # Gets current branch
   git rev-parse --abbrev-ref HEAD
 }
