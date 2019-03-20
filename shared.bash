@@ -120,6 +120,14 @@ main() {
     fi
   }
 
+  setup_base16() {
+    # Base16 Shell
+    BASE16_SHELL="$HOME/.config/base16-shell/"
+    [ -n "$PS1" ] && \
+        [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+            eval "$("$BASE16_SHELL/profile_helper.sh")"
+  }
+
   local dependencies
     dependencies=(
         aliases
@@ -134,6 +142,7 @@ main() {
         gpg_config
         bosh_env_scripts
         ssh_agent
+        base16
       )
 
   for dependency in ${dependencies[@]}; do

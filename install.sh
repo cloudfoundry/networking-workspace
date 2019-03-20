@@ -276,6 +276,9 @@ setup_git() {
 all_the_repos() {
   echo "Cloning all of the repos we work on..."
 
+  # base16-shell: For the porple
+  clone_if_not_exist "https://github.com/chriskempson/base16-shell" "${HOME}/.config/base16-shell"
+
   # Deployments Routing:  Pipelines, environment info, helpful scripts
   clone_if_not_exist "git@github.com:cloudfoundry/deployments-routing" "${HOME}/workspace/deployments-routing"
 
