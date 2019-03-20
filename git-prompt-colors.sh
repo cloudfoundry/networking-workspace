@@ -6,11 +6,11 @@ override_git_prompt_colors() {
 
   DateTime="\$(date +'%Y-%m-%d %H:%M')"
   CfTarget="\$(cf-target)"
-  GoBoshTarget="\$(env | grep BOSH_DIR | cut -d '/' -f 7)"
-    KubeCluster="\$(
-  if [ -f ~/.kube/config ]; then
-    kubectl config current-context
-  fi)"
+  GoBoshTarget="\${BOSH_ENV}"
+  KubeCluster="\$(
+    if [ -f ~/.kube/config ]; then
+      kubectl config current-context
+    fi)"
   Ochre="\033[38;5;95m"
   GIT_PROMPT_START_USER="\n${Ochre}bosh: ${GoBoshTarget} | kube-cluster: ${KubeCluster} | cf: ${CfTarget} (\h) ${ResetColor}\n${Yellow}${PathShort}${ResetColor}"
   GIT_PROMPT_END_USER=" ${Cyan}${GIT_PAIR}${ResetColor}\n$ "
