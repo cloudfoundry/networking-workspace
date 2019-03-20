@@ -848,3 +848,13 @@ function forever() {
   done
 }
 
+function zoom() {
+  local who="${1}"
+
+  if [[ -n "${who}" ]]; then
+    echo "Zooming ${who}.networking.family..."
+    open "http://${who}.networking.family"
+  else
+    echo "Usage: zoom <who-to-zoooooom> *Must have a networking.family subdomain."
+  fi
+}
