@@ -460,6 +460,12 @@ gobosh_target() {
 
   export BOSH_DIR="$(lookup_env $BOSH_ENV)"
 
+  changes="$(git -C ${BOSH_DIR} st --porcelain)"
+  exit_code="${?}"
+  if [[ "${exit_code}" -eq 0 ]] && [[ -z "${changes}" ]]; then
+    git -C $BOSH_DIR pull
+  fi
+
   pushd $BOSH_DIR 1>/dev/null
       eval "$(bbl print-env)"
   popd 1>/dev/null
