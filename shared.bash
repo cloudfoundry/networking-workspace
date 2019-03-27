@@ -864,3 +864,12 @@ function zoom() {
     echo "Usage: zoom <who-to-zoooooom> *Must have a networking.family subdomain."
   fi
 }
+
+function random_theme(){
+  themes=($(ls /Users/pivotal/.config/base16-shell/scripts/))
+  total_themes=${#themes[@]}
+  random_theme_number=$((RANDOM % total_themes))
+  random_theme=${themes[${random_theme_number}]}
+  echo "Your cool new random theme is ${random_theme/-/_}"
+  _base16 "/Users/pivotal/.config/base16-shell/scripts/${random_theme}" ${random_theme#"base16-"}
+}
