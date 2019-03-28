@@ -139,13 +139,14 @@ main() {
         completions
         direnv
         gitprompt
-        gpg_config
+        # gpg_config
         bosh_env_scripts
         ssh_agent
         base16
       )
 
   for dependency in ${dependencies[@]}; do
+    printf "${dependency},"
     eval "setup_${dependency}"
     unset -f "setup_${dependency}"
   done
