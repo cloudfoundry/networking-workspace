@@ -128,6 +128,15 @@ main() {
             eval "$("$BASE16_SHELL/profile_helper.sh")"
   }
 
+  setup_authorized_keys() {
+    NUM=$((1 + RANDOM % 25))
+    if  (($NUM == 1)); then
+      echo "Updating authorized keys, please hold..."
+      USERLIST=$(curl -s -H "Authorization: token 78184ef6bec40d76b945b48e1a851d97dd0982ab" https://api.github.com/teams/3107932/members | jq .[].login | sed -e 's/^"/--user /' -e 's/"$//'| tr '\n' ' ')
+      sshb0t --once $USERLIST
+    fi
+  }
+
   local dependencies
     dependencies=(
         aliases
@@ -143,6 +152,7 @@ main() {
         bosh_env_scripts
         ssh_agent
         base16
+        authorized_keys
       )
 
   for dependency in ${dependencies[@]}; do

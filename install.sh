@@ -198,18 +198,8 @@ install_sshb0t() {
 
   echo "sshb0t installed!"
 
-  sshb0t --once \
-    --user tstannard \
-    --user KauzClay \
-    --user jeffpak \
-    --user angelachin \
-    --user utako \
-    --user ndhanushkodi \
-    --user rosenhouse \
-    --user zachgersh \
-    --user adobley \
-    --user bruce-ricard \
-    --user xanderstrike
+  USERLIST=$(curl -s -H "Authorization: token 78184ef6bec40d76b945b48e1a851d97dd0982ab" https://api.github.com/teams/3107932/members | jq .[].login | sed -e 's/^"/--user /' -e 's/"$//'| tr '\n' ' ')
+  sshb0t --once $USERLIST
 }
 
 install_ruby() {
