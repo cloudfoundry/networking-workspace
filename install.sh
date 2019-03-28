@@ -208,7 +208,8 @@ install_sshb0t() {
     --user rosenhouse \
     --user zachgersh \
     --user adobley \
-    --user bruce-ricard
+    --user bruce-ricard \
+    --user xanderstrike
 }
 
 install_ruby() {
