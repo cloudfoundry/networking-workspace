@@ -9,6 +9,8 @@ skip="${1:-}"
 main() {
   confirm
 
+  git update-index --assume-unchanged custom-commands.sh
+
   cd $(dirname $0)
 
   brew_all_the_things

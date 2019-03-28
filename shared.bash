@@ -874,3 +874,6 @@ function random_theme(){
   echo "Your cool new random theme is ${random_theme/-/_}"
   _base16 "/Users/pivotal/.config/base16-shell/scripts/${random_theme}" $(basename ${random_theme#"base16-"} .sh)
 }
+
+source $HOME/workspace/networking-workspace/custom-commands.sh
+
