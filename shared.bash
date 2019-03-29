@@ -389,16 +389,6 @@ function toolsmiths() {
 
 # NEEDS CONSOLIDATION WITH ROUTING SCRIPTS
 
-bosh_ssh_c2c() {
-  if (( $# != 1 ))
-    then echo "Usage: bosh_ssh_c2c <env>"
-  else
-    bosh target bosh.$1.c2c.cf-app.com
-    bosh download manifest $1-diego /tmp/$1-diego.yml
-    bosh -d /tmp/$1-diego.yml ssh --gateway_host bosh.$1.c2c.cf-app.com --gateway_user vcap --gateway_identity_file ~/workspace/cf-networking-deployments/environments/$1/keypair/id_rsa_bosh
-  fi
-}
-
 cf_target() {
   if [ $# = 0 ]; then
     echo "missing environment-name"
@@ -594,76 +584,9 @@ gobosh_deploy() {
   -v system_domain=$(echo "${BOSH_DIR}" | cut -f 7 -d '/').c2c.cf-app.com
 }
 
-create_c2c_bosh_lite() {
-    gobosh_target_lite;
-    bosh create-env ~/workspace/bosh-deployment/bosh.yml \
-    --state ~/workspace/cf-networking-deployments/environments/local/state.json \
-    -o ~/workspace/bosh-deployment/virtualbox/cpi.yml \
-    -o ~/workspace/bosh-deployment/virtualbox/outbound-network.yml \
-    -o ~/workspace/bosh-deployment/bosh-lite.yml \
-    -o ~/workspace/bosh-deployment/bosh-lite-runc.yml \
-    -o ~/workspace/bosh-deployment/jumpbox-user.yml \
-    -o ~/workspace/bosh-deployment/local-dns.yml \
-    --vars-store ~/workspace/cf-networking-deployments/environments/local/creds.yml \
-    -v director_name="Bosh Lite Director" \
-    -v internal_ip=192.168.50.6 \
-    -v internal_gw=192.168.50.1 \
-    -v internal_cidr=192.168.50.0/24 \
-    -v outbound_network_name="NatNetwork"
-
-    bosh -e 192.168.50.6 --ca-cert <(bosh int ~/workspace/cf-networking-deployments/environments/local/creds.yml --path /director_ssl/ca) alias-env vbox
-    export BOSH_CLIENT="admin"
-    export BOSH_CLIENT_SECRET="$(bosh int ~/workspace/cf-networking-deployments/environments/local/creds.yml --path /admin_password)"
-    export BOSH_ENVIRONMENT="vbox"
-    export BOSH_DEPLOYMENT="cf"
-    export BOSH_CA_CERT="/tmp/bosh-lite-ca-cert"
-    bosh int ~/workspace/cf-networking-deployments/environments/local/creds.yml --path /director_ssl/ca > ${BOSH_CA_CERT}
-
-    STEMCELL_VERSION="$(bosh int ~/workspace/cf-deployment/cf-deployment.yml --path=/stemcells/0/version)"
-    echo "will upload stemcell ${STEMCELL_VERSION}"
-    bosh -e vbox upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}"
-
-    bosh -e vbox -n update-cloud-config ~/workspace/cf-deployment/iaas-support/bosh-lite/cloud-config.yml
-}
-
-delete_c2c_bosh_lite() {
-    bosh delete-env ~/workspace/bosh-deployment/bosh.yml \
-    --state ~/workspace/cf-networking-deployments/environments/local/state.json \
-    -o ~/workspace/bosh-deployment/virtualbox/cpi.yml \
-    -o ~/workspace/bosh-deployment/virtualbox/outbound-network.yml \
-    -o ~/workspace/bosh-deployment/bosh-lite.yml \
-    -o ~/workspace/bosh-deployment/bosh-lite-runc.yml \
-    -o ~/workspace/bosh-deployment/jumpbox-user.yml \
-    --vars-store ~/workspace/cf-networking-deployments/environments/local/creds.yml \
-    -v director_name="Bosh Lite Director" \
-    -v internal_ip=192.168.50.6 \
-    -v internal_gw=192.168.50.1 \
-    -v internal_cidr=192.168.50.0/24 \
-    -v outbound_network_name="NatNetwork"
-}
-
-unbork_consul() {
-  bosh vms | grep consul | cut -d ' ' -f1 > /tmp/consul-vms
-  cat /tmp/consul-vms | xargs -n1 bosh ssh -c "sudo /var/vcap/bosh/bin/monit stop consul_agent"
-  cat /tmp/consul-vms | xargs -n1 bosh ssh -c "sudo rm -rf /var/vcap/store/consul_agent/*"
-  cat /tmp/consul-vms | xargs -n1 bosh ssh -c "sudo /var/vcap/bosh/bin/monit start consul_agent"
-}
-
-
 function windows_port_forward() {
   echo "Port forwarding from $1"
   ssh -f -L 3389:$1:3389 -N -i ${BOSH_GW_PRIVATE_KEY} ${BOSH_GW_USER}@${BOSH_GW_HOST}
-}
-
-function story() {
-  if [ -n "$TRACKER_API_TOKEN" ]; then
-    STORY_TITLE=" $(curl -s -H "X-TrackerToken: $TRACKER_API_TOKEN" \
-      "https://www.pivotaltracker.com/services/v5/projects/$TRACKER_PROJECT/stories/${1/\#/}" \
-      | jq -r .name)"
-  else
-    STORY_TITLE=''
-  fi
-  printf "\n\n[$1]$STORY_TITLE" > ~/.git-tracker-story
 }
 
 function create_service_account_key_for_toolsmiths_env() {
@@ -834,12 +757,6 @@ function good_morning(){
 
   # PKS Networking Env Metadata-- env info for pivotal ci
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pks-networking-env-metadata"
-}
-
-function create_and_sign_cert_with_fake_ca() {
-  certstrap init --common-name fake_ca
-  certstrap request-cert --common-name $1.routing.cf-app.com
-  certstrap sign --CA fake_ca --expires "100 years" $1.routing.cf-app.com
 }
 
 function forever() {
