@@ -68,9 +68,6 @@ main() {
   fi
   set -e
 
-  echo "Cloning colorschemes..."
-  clone_if_not_exist https://github.com/chriskempson/base16-shell.git "${HOME}/.config/colorschemes"
-
   echo "Configuring Spectacle..."
   cp -f "$(pwd)/com.divisiblebyzero.Spectacle.plist" "${HOME}/Library/Preferences/"
 

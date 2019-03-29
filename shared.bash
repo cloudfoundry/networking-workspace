@@ -89,12 +89,6 @@ main() {
     fi
   }
 
-  setup_colors() {
-    local colorscheme
-    colorscheme="${HOME}/.config/colorschemes/scripts/base16-monokai.sh"
-    [[ -s "${colorscheme}" ]] && source "${colorscheme}"
-  }
-
   setup_ssh_agent() {
     if [[ ! -e ~/.ssh_agent ]]; then
       if [[ -n ${SSH_AUTH_SOCK} ]]; then
@@ -132,7 +126,6 @@ main() {
     dependencies=(
         aliases
         environment
-        colors
         rbenv
         aws
         fasd
