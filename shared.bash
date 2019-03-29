@@ -122,9 +122,14 @@ main() {
             eval "$("$BASE16_SHELL/profile_helper.sh")"
   }
 
+  setup_fzf() {
+    [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+  }
+
   local dependencies
     dependencies=(
         aliases
+        base16
         environment
         rbenv
         aws
@@ -135,7 +140,7 @@ main() {
         # gpg_config
         bosh_env_scripts
         ssh_agent
-        base16
+        fzf
       )
 
   for dependency in ${dependencies[@]}; do
