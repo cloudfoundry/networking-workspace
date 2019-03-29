@@ -358,11 +358,11 @@ function server() { # Create webserver from current directory
 }
 
 function nuke() { # Straight up murders all processes matching first arg
-  ps ax | grep $1 | awk '{print $1}' | xargs kill -9
+  ps ax | grep $1 | grep -v grep | awk '{print $1}' | xargs kill -9
 }
 
 function politely_nuke() { # As above but nicely
-  ps ax | grep $1 | awk '{print $1}' | xargs kill
+  ps ax | grep $1 | grep -v grep | awk '{print $1}' | xargs kill
 }
 
 function smart_bomb() { # Don't use this
