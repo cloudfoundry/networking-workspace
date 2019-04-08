@@ -3,6 +3,7 @@ authors:
   ad: Amelia Downs; adowns
   ao: Aidan Obley; aobley
   as: Alex Standke; astandke
+  bk: Barack Karavani; bkaravani
   br: Bruce Ricard; bricard
   bk: Barack Karavani; bkaravani
   ca: Christian Ang; cang
@@ -10,8 +11,8 @@ authors:
   ck: Clay Kauzlaric; ckauzlaric
   dirk: Dirk Janssen; djanssen
   gr: Gabe Rosenhouse; grosenhouse
-  jp: Jeff Pak
   jmp: Joseph Palermo; jpalermo
+  jp: Jeff Pak
   nd: Nitya Dhanushkodi; ndhanushkodi
   nh: Nancy Hsieh; nhsieh
   rs: Rodolfo Sanchez; rsanchez
@@ -19,7 +20,6 @@ authors:
   t$: Teal Stannard; tstannard
   ts: Tyler Schultz; tschultz
   uu: Utako Ueda; uueda
-
 email:
   domain: pivotal.io
 
