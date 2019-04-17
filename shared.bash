@@ -144,7 +144,6 @@ main() {
       )
 
   for dependency in ${dependencies[@]}; do
-    printf "${dependency},"
     eval "setup_${dependency}"
     unset -f "setup_${dependency}"
   done
