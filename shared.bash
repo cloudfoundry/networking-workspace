@@ -31,6 +31,9 @@ main() {
     alias chg="credhub_get"
 
     alias local_ginkgo="/Users/pivotal/go/bin/ginkgo"
+
+    #kubectl aliases
+    alias k="kubectl"
   }
 
   setup_environment() {
