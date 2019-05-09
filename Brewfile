@@ -96,6 +96,7 @@ brew 'universal-ctags/universal-ctags/universal-ctags', args: ['HEAD']
 brew 'utf8proc'
 brew 'watch'
 brew 'wget'
+brew 'yarn'
 brew 'xz'
 cask 'chromedriver'
 cask 'docker'
