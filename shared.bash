@@ -46,6 +46,7 @@ main() {
     # git duet config
     export GIT_DUET_GLOBAL=true
     export GIT_DUET_ROTATE_AUTHOR=1
+    export GIT_DUET_CO_AUTHORED_BY=1
 
     # setup path
     export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:$HOME/workspace/routing-ci/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin
