@@ -760,6 +760,9 @@ function good_morning(){
 
   # PKS Networking Env Metadata-- env info for pivotal ci
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pks-networking-env-metadata"
+
+  # PKS Networking Env Metadata-- env info for pivotal ci
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal-cf/norsk-config"
 }
 
 function forever() {
