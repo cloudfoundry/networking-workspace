@@ -796,5 +796,13 @@ function random_theme(){
   _base16 "/Users/pivotal/.config/base16-shell/scripts/${random_theme}" $(basename ${random_theme#"base16-"} .sh)
 }
 
+function ship_copilot(){
+  echo "Building and deploying a new version of copilot-server..."
+  GOOS=linux go build -o copilot-server cmd/copilot-server/main.go
+  bosh scp copilot-server istio-control:/tmp/
+  bosh ssh istio-control -c "sudo mv /tmp/copilot-server /var/vcap/packages/copilot/bin/copilot-server; sudo /var/vcap/bosh/bin/monit restart copilot"
+  echo "Done!"
+}
+
 source $HOME/workspace/networking-workspace/custom-commands.sh
 
