@@ -59,6 +59,9 @@ main() {
   echo "Install deployment extractor..."
   GOPATH="${HOME}/go" go get -u github.com/kkallday/deployment-extractor
 
+  echo "Install go-langserver for luan/nvim config (until gopls is ready)..."
+  GOPATH="${HOME}/go" go get -u github.com/sourcegraph/go-langserver
+
   echo "Installing fly..."
   set +e
   if [ -z "$(fly -v)" ]; then
