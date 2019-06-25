@@ -804,5 +804,13 @@ function ship_copilot(){
   echo "Done!"
 }
 
+function ship_pilot(){
+  echo "Building and deploying a new version of pilot-discovery..."
+  GOOS=linux go build -o pilot-discovery pilot/cmd/pilot-discovery/main.go
+  bosh scp pilot-discovery istio-control:/tmp/
+  bosh ssh istio-control -c "sudo mv /tmp/pilot-discovery /var/vcap/packages/pilot/bin/pilot-discovery; sudo /var/vcap/bosh/bin/monit restart pilot-discovery"
+  echo "Done!"
+}
+
 source $HOME/workspace/networking-workspace/custom-commands.sh
 
