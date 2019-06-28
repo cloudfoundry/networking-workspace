@@ -327,9 +327,6 @@ all_the_repos() {
   # Routing API CLI: Used to interact with the Routing API, which can be found in Routing Release
   clone_if_not_exist "https://github.com/cloudfoundry/routing-api-cli" "${GOPATH}/src/code.cloudfoundry.org/routing-api-cli"
 
-  # Routing CI: Scripts and tasks for the Routing Concourse CI
-  clone_if_not_exist "https://github.com/cloudfoundry/routing-ci" "${HOME}/workspace/routing-ci"
-
   # CF Networking CI: the DEPRECATED CI repo for Container Networking Release CI
   clone_if_not_exist "https://github.com/cloudfoundry/cf-networking-ci" "${HOME}/workspace/cf-networking-ci"
 

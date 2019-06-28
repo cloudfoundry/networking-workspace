@@ -49,7 +49,7 @@ main() {
     export GIT_DUET_CO_AUTHORED_BY=1
 
     # setup path
-    export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:$HOME/workspace/routing-ci/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin
+    export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:$HOME/workspace/deployments-routing/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin
     export EDITOR=nvim
   }
 
@@ -105,7 +105,7 @@ main() {
 
   setup_bosh_env_scripts() {
     local bosh_scripts
-    bosh_scripts="${HOME}/workspace/routing-ci/scripts/script_helpers.sh"
+    bosh_scripts="${HOME}/workspace/deployments-routing/scripts/script_helpers.sh"
     [[ -s "${bosh_scripts}" ]] && source "${bosh_scripts}"
   }
 
@@ -689,9 +689,6 @@ function good_morning(){
 
   # Routing API CLI: Used to interact with the Routing API, which can be found in Routing Release
   pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/routing-api-cli"
-
-  # Routing CI: Scripts and tasks for the Routing Concourse CI
-  pull_if_no_dirty_changes "${HOME}/workspace/routing-ci"
 
   # CF Networking CI: the DEPRECATED CI repo for Container Networking Release CI
   pull_if_no_dirty_changes "${HOME}/workspace/cf-networking-ci"
