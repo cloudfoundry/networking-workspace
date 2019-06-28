@@ -794,19 +794,27 @@ function random_theme(){
 }
 
 function ship_copilot(){
-  echo "Building and deploying a new version of copilot-server..."
+  echo "☁️  Building and deploying a new version of copilot-server..."
   GOOS=linux go build -o copilot-server cmd/copilot-server/main.go
-  bosh scp copilot-server istio-control:/tmp/
-  bosh ssh istio-control -c "sudo mv /tmp/copilot-server /var/vcap/packages/copilot/bin/copilot-server; sudo /var/vcap/bosh/bin/monit restart copilot"
-  echo "Done!"
+  if [ "$?" = "0" ]; then
+    bosh scp copilot-server istio-control:/tmp/
+    bosh ssh istio-control -c "sudo mv /tmp/copilot-server /var/vcap/packages/copilot/bin/copilot-server; sudo /var/vcap/bosh/bin/monit restart copilot"
+    echo "👨🏽‍✈️Done!"
+  else
+    printf "🚨 Wee woo wee woo 🚨\nCould not compile Copilot!\nMake sure you're in the copilot directory, and there are no compilation errors.\n" 1>&2
+  fi
 }
 
 function ship_pilot(){
-  echo "Building and deploying a new version of pilot-discovery..."
+  echo "☁️  Building and deploying a new version of pilot-discovery..."
   GOOS=linux go build -o pilot-discovery pilot/cmd/pilot-discovery/main.go
-  bosh scp pilot-discovery istio-control:/tmp/
-  bosh ssh istio-control -c "sudo mv /tmp/pilot-discovery /var/vcap/packages/pilot/bin/pilot-discovery; sudo /var/vcap/bosh/bin/monit restart pilot-discovery"
-  echo "Done!"
+  if [ "$?" = "0" ]; then
+    bosh scp pilot-discovery istio-control:/tmp/
+    bosh ssh istio-control -c "sudo mv /tmp/pilot-discovery /var/vcap/packages/pilot/bin/pilot-discovery; sudo /var/vcap/bosh/bin/monit restart pilot-discovery"
+    echo "👩‍✈️ Done!"
+  else
+    printf "🚨 Wee woo wee woo 🚨\nCould not compile Pilot!\nMake sure you're in the pilot directory, and there are no compilation errors.\n" 1>&2
+  fi
 }
 
 source $HOME/workspace/networking-workspace/custom-commands.sh
