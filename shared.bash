@@ -817,5 +817,9 @@ function ship_pilot(){
   fi
 }
 
+function restart_envoy(){
+  bosh ssh istio-router -c "sudo /var/vcap/bosh/bin/monit restart envoy"
+}
+
 source $HOME/workspace/networking-workspace/custom-commands.sh
 
