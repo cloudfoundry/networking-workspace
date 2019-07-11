@@ -71,6 +71,12 @@ main() {
   fi
   set -e
 
+  if [ ! -f ~/.flyrc ]; then
+    cp flyrc ~/.flyrc
+  else
+    echo ".flyrc file present, not overwriting"
+  fi
+
   echo "Configuring Spectacle..."
   cp -f "$(pwd)/com.divisiblebyzero.Spectacle.plist" "${HOME}/Library/Preferences/"
 
