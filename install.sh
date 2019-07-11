@@ -8,6 +8,9 @@ main() {
   echo "Welcome to THE NETWORKING PROGRAM 🎉🎉🎉"
   cd ~/workspace/networking-workspace
 
+  echo "Enable passwordless sudo..."
+   sudo grep 'pivotal' /etc/sudoers || echo $(echo "pivotal ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers)
+
   echo "Add daily workstation installation to launchd..."
   cp ~/workspace/networking-workspace/workstation.install.daily.plist ~/Library/LaunchAgents/workstation.install.daily.plist
   launchctl load ~/Library/LaunchAgents/workstation.install.daily.plist
