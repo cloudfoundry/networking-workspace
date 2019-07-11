@@ -11,7 +11,7 @@
     <key>UserName</key>
     <string>pivotal</string>
     <key>Program</key>
-    <string>/Users/pivotal/workspace/networking-workspace/install.sh</string>
+    <string>/Users/pivotal/workspace/networking-workspace/pull_install.sh</string>
     <key>StandardErrorPath</key>
     <string>/Users/pivotal/workspace/networking-workspace/install.daily.stderr.log</string>
     <key>StandardOutPath</key>
