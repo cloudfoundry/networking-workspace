@@ -85,6 +85,9 @@ main() {
 
   install_tmuxfiles
 
+  echo "Set screensaver timeout to 10 minutes..."
+  defaults -currentHost write com.apple.screensaver idleTime 600
+
   echo "Workstation setup complete — open a new window to apply all settings! 🌈"
 }
 
