@@ -4,10 +4,17 @@
 # Also exit when there are unset variables
 set -eu
 
-skip="${1:-}"
-
 main() {
-  confirm
+  echo "Welcome to THE NETWORKING PROGRAM 🎉🎉🎉"
+  cd ~/workspace/networking-workspace
+
+  echo "Add daily workstation installation to launchd..."
+  cp ~/workspace/networking-workspace/workstation.install.daily.plist ~/Library/LaunchAgents/workstation.install.daily.plist
+  launchctl load ~/Library/LaunchAgents/workstation.install.daily.plist
+
+  # adding the path so it can run in bg
+  export GOPATH=~/go
+  export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:$HOME/workspace/deployments-routing/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin:/usr/local/bin
 
   git update-index --assume-unchanged custom-commands.sh
 
@@ -91,6 +98,7 @@ main() {
 
   install_tmuxfiles
 
+
   echo "Set screensaver timeout to 10 minutes..."
   defaults -currentHost write com.apple.screensaver idleTime 600
 
@@ -106,24 +114,6 @@ clone_if_not_exist() {
   fi
 }
 
-confirm() {
-  if [[ -n "${skip}" ]] && [[ "${skip}" == "-f" ]]; then
-    return
-  fi
-
-  read -r -p "Are you sure? [y/N] " response
-  case $response in
-    [yY][eE][sS]|[yY])
-      return
-      ;;
-
-    *)
-      echo "Bailing out, you said no"
-      exit 187
-      ;;
-  esac
-}
-
 brew_all_the_things() {
   # TODO: Add retry logic around this instead
   set +e
@@ -134,11 +124,11 @@ brew_all_the_things() {
   fi
 
   echo "Running the Brewfile..."
-  brew update
-  brew tap Homebrew/bundle
+  /usr/local/bin/brew update
+  /usr/local/bin/brew tap Homebrew/bundle
   ln -sf $(pwd)/Brewfile ${HOME}/.Brewfile
-  brew bundle --global
-  brew bundle cleanup
+  /usr/local/bin/brew bundle --global
+  /usr/local/bin/brew bundle cleanup
 
   set -e
 }
@@ -222,6 +212,7 @@ install_sshb0t() {
 }
 
 install_ruby() {
+  set -e # it's okay if this fails, we don't use ruby much
   ruby_version=2.4.2
   echo "Installing ruby $ruby_version..."
   rbenv install -s $ruby_version
@@ -257,10 +248,9 @@ install_tmuxfiles() {
 
     if [ $? -eq 0 ]; then
       echo "If you'd like to update your tmux files, please kill all of your tmux sessions and run this script again."
-      exit 1
     else
       clone_if_not_exist "https://github.com/luan/tmuxfiles" "${HOME}/workspace/tmuxfiles"
-      ${HOME}/workspace/tmuxfiles/install
+      yes | ${HOME}/workspace/tmuxfiles/install
     fi
   set -e
 }
