@@ -1,0 +1,70 @@
+#!/bin/bash -eu
+TIP_DIR="${HOME}/workspace/networking-workspace/tips"
+
+function main() {
+  local tiptext
+  tiptext="${1:-""}"
+
+  if [[ -z "${tiptext}" ]]; then
+    print_usage
+    list_tips
+    return 0
+  fi
+
+  local tipnames=""
+  local num_tipnames=0
+
+  if [[ -f "${TIP_DIR}"/"${tiptext}" ]]; then
+    tipnames="${tiptext}"
+  fi
+
+  if [[ ${tipnames} == "" ]]; then
+    tipnames="$(find -L "${TIP_DIR}" -name "*${tiptext}*" -print0 | xargs -0 -n 1 basename)"
+  fi
+
+  num_tipnames=$(printf "$tipnames\n" | sed '/^\s*$/d' | wc -l | tr -d '[:space:]')
+  case ${num_tipnames} in
+    0)
+      printf "Searching through text of tips... (\"%s\" does not match any tip names.)\n\n" "${tiptext}"
+      print_search "${tiptext}"
+      printf "\nYou can also create a new tip at ${TIP_DIR}!\n\n"
+      ;;
+    1)
+      print_tip "${tipnames}"
+      ;;
+    *)
+      printf "Please disambiguate (there are %s tip names containing \"%s\"):\n\n%s\n" "${num_tipnames}" "${tiptext}" "${tipnames}"
+      return 2
+      ;;
+  esac
+}
+
+function print_usage() {
+  printf "tip [tiptext]\n"
+  printf "where:\n"
+  printf "  tiptext = name of tip or regular expression with which to search through all tips.\n"
+}
+
+function list_tips() {
+  printf "\nTips:\n"
+  ls -1 "${TIP_DIR}"
+}
+
+function print_tip() {
+  local tipname=$1
+
+  local tiptext
+  tiptext="$(cat "${TIP_DIR}/${tipname}")"
+
+  printf "TIP [%s]:\n%s\n\n" "${tipname}" "${tiptext}"
+}
+
+function print_search() {
+  local tiptext="$1"
+  pushd "${TIP_DIR}" >/dev/null
+    set +e
+    ag --context "${tiptext}" *
+    set -e
+  popd >/dev/null
+}
+main "${@:-}"
