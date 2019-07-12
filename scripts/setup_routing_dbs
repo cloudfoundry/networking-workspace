@@ -19,7 +19,7 @@ if [ ${postgres_role_status} -ne 0 ]; then
 fi
 
 echo "Configuring Mysql"
-sleep 5
+sleep 10
 set +e
 mysql -U root 2>&1 | grep "Access denied"
 mysql_already_configured=$?
