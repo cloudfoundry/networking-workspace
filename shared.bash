@@ -821,5 +821,18 @@ function restart_envoy(){
   bosh ssh istio-router -c "sudo /var/vcap/bosh/bin/monit restart envoy"
 }
 
+function ws(){
+  sesh="${1}"
+
+  tmux kill-session -t $sesh
+  tmux new-session -A -s $sesh "tmux source-file ~/workspace/networking-workspace/tmux_workspaces/${sesh}"
+}
+
+function kws(){
+  sesh="${1}"
+
+  tmux kill-session -t $sesh
+}
+
 source $HOME/workspace/networking-workspace/custom-commands.sh
 

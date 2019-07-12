@@ -1,0 +1,23 @@
+rename-session copilot
+
+new-window -n copilot-vim -c ~/workspace/istio-release/src/code.cloudfoundry.org/copilot "nvim ."
+split-window -v -p 20 -c ~/workspace/istio-release/src/code.cloudfoundry.org/copilot
+
+new-window -n pilot-vim
+send "cd ~/workspace/istio-release/src/istio.io/istio/" C-m
+send "vim ." C-m
+split-window -v -p 20
+send "cd ~/workspace/istio-release/src/istio.io/istio/" C-m
+
+new-window -n logs
+send "bosh ssh istio-control/0" C-m
+send "sudo su" C-m
+send "cd /var/vcap/sys/log/pilot-discovery" C-m
+send "ls | xargs tail -f" C-m
+split-window -v
+send "bosh ssh istio-control/0" C-m
+send "sudo su" C-m
+send "cd /var/vcap/sys/log/copilot" C-m
+send "ls | xargs tail -f" C-m
+
+select-window -t copilot:2

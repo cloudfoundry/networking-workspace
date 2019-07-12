@@ -1,0 +1,4 @@
+rename-session workspace
+
+new-window -n workspace -c ~/workspace/networking-workspace "nvim ."
+split-window -h -c ~/
