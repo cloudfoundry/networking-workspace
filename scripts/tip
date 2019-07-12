@@ -3,7 +3,9 @@ TIP_DIR="${HOME}/workspace/networking-workspace/tips"
 
 function main() {
   local tiptext
+  local open
   tiptext="${1:-""}"
+  open="${2:-""}"
 
   if [[ -z "${tiptext}" ]]; then
     print_usage
@@ -30,7 +32,11 @@ function main() {
       printf "\nYou can also create a new tip at ${TIP_DIR}!\n\n"
       ;;
     1)
-      print_tip "${tipnames}"
+      if [[ "${open}" == "--open" ]]; then
+        open_tip "${tipnames}"
+      else
+        print_tip "${tipnames}"
+      fi
       ;;
     *)
       printf "Please disambiguate (there are %s tip names containing \"%s\"):\n\n%s\n" "${num_tipnames}" "${tiptext}" "${tipnames}"
@@ -40,9 +46,10 @@ function main() {
 }
 
 function print_usage() {
-  printf "tip [tiptext]\n"
+  printf "tip [tiptext [--open]]\n"
   printf "where:\n"
   printf "  tiptext = name of tip or regular expression with which to search through all tips.\n"
+  printf "  --open opens the tip in a browser.\n"
 }
 
 function list_tips() {
@@ -57,6 +64,12 @@ function print_tip() {
   tiptext="$(cat "${TIP_DIR}/${tipname}")"
 
   printf "TIP [%s]:\n%s\n\n" "${tipname}" "${tiptext}"
+}
+
+function open_tip() {
+  local tipname=$1
+
+  open "https://www.github.com/cloudfoundry/networking-workspace/blob/master/tips/${tipname}"
 }
 
 function print_search() {
