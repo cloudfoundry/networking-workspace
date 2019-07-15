@@ -290,10 +290,15 @@ set-git-keys() {
 
 function pks_login() {
   local environment=$1
+  local path_to_metadata="${HOME}/go/src/github.com/pivotal/pks-networking-env-metadata/${environment}/metadata.json"
 
-  local pks_api=$(jq -r .pks_api.url $HOME/go/src/github.com/pivotal/pks-networking-env-metadata/$environment/metadata.json)
-  local pks_user=$(jq -r .pks_api.uaa_admin_user $HOME/go/src/github.com/pivotal/pks-networking-env-metadata/$environment/metadata.json)
-  local pks_password=$(jq -r .pks_api.uaa_admin_password $HOME/go/src/github.com/pivotal/pks-networking-env-metadata/$environment/metadata.json)
+  local pks_api=$(jq -r .pks_api.url "${path_to_metadata}")
+  local pks_user=$(jq -r .pks_api.uaa_admin_user "${path_to_metadata}")
+  local pks_password=$(jq -r .pks_api.uaa_admin_password "${path_to_metadata}")
+
+  export OM_TARGET=$(jq -r .ops_manager.url "${path_to_metadata}")
+  export OM_USERNAME=$(jq -r .ops_manager.username "${path_to_metadata}")
+  export OM_PASSWORD=$(jq -r .ops_manager.password "${path_to_metadata}")
 
   pks login -a $pks_api -u $pks_user -p $pks_password --skip-ssl-validation
 }
