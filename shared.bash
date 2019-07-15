@@ -296,6 +296,7 @@ function pks_login() {
   local pks_user=$(jq -r .pks_api.uaa_admin_user "${path_to_metadata}")
   local pks_password=$(jq -r .pks_api.uaa_admin_password "${path_to_metadata}")
 
+  export OM_SKIP_SSL_VALIDATION=true
   export OM_TARGET=$(jq -r .ops_manager.url "${path_to_metadata}")
   export OM_USERNAME=$(jq -r .ops_manager.username "${path_to_metadata}")
   export OM_PASSWORD=$(jq -r .ops_manager.password "${path_to_metadata}")
