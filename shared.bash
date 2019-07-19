@@ -358,6 +358,8 @@ function loop() { # Repeats a given command forever
 
 function server() { # Create webserver from current directory
   local port="${1:-8000}";
+  echo "Links to give out:"
+  ifconfig | grep "inet.*netmask" | sed "s/inet \(.*\) netmask.*/http:\/\/\1:$port\//g"
   sleep 1 && open "http://localhost:${port}/" &
   # Set the default Content-Type to `text/plain` instead of `application/octet-stream`
   # And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
