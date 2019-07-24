@@ -845,7 +845,7 @@ function update_fly() {
   if [[ -z "$1" ]]; then
     echo "Usage 'update_fly <domain>'"
   else
-    wget "https://$1/api/v1/cli?arch=amd64&platform=darwin" -o fly
+    wget "https://$1/api/v1/cli?arch=amd64&platform=darwin" -O fly
     chmod +x fly
     sudo mv fly $(which fly)
   fi
