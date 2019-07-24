@@ -840,5 +840,16 @@ function kws(){
   tmux kill-session -t $sesh
 }
 
+
+function update_fly() {
+  if [[ -z "$1" ]]; then
+    echo "Usage 'update_fly <domain>'"
+  else
+    wget "https://$1/api/v1/cli?arch=amd64&platform=darwin" -o fly
+    chmod +x fly
+    sudo mv fly $(which fly)
+  fi
+}
+
 source $HOME/workspace/networking-workspace/custom-commands.sh
 
