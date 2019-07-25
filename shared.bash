@@ -842,6 +842,9 @@ function kws(){
   tmux kill-session -t $sesh
 }
 
+function ips() {
+  ifconfig | grep "inet.*netmask" | sed "s/inet \(.*\) netmask.*/\1/g"
+}
 
 function update_fly() {
   if [[ -z "$1" ]]; then
