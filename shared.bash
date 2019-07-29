@@ -801,29 +801,25 @@ function random_theme(){
   _base16 "/Users/pivotal/.config/base16-shell/scripts/${random_theme}" $(basename ${random_theme#"base16-"} .sh)
 }
 
-function ship_copilot(){
-  echo "☁️  Building and deploying a new version of copilot-server..."
-  GOOS=linux go build -o copilot-server cmd/copilot-server/main.go
+function ship_it(){
+  binary="${1}"
+  vm="${2}"
+  service="${3}"
+  echo "☁️  Building and deploying a new version of $binary..."
+  GOOS=linux go build -o $binary cmd/$binary/main.go
   if [ "$?" = "0" ]; then
-    bosh scp copilot-server istio-control:/tmp/
-    bosh ssh istio-control -c "sudo mv /tmp/copilot-server /var/vcap/packages/copilot/bin/copilot-server; sudo /var/vcap/bosh/bin/monit restart copilot"
+    bosh scp $binary $vm:/tmp/
+    bosh ssh $vm -c "sudo mv /tmp/$binary /var/vcap/packages/$service/bin/$binary; sudo /var/vcap/bosh/bin/monit restart $service"
     echo "👨🏽‍✈️Done!"
   else
-    printf "🚨 Wee woo wee woo 🚨\nCould not compile Copilot!\nMake sure you're in the copilot directory, and there are no compilation errors.\n" 1>&2
+    printf "🚨 Wee woo wee woo 🚨\nCould not compile $binary!\nMake sure you're in the correct directory, and there are no compilation errors.\n" 1>&2
   fi
 }
 
-function ship_pilot(){
-  echo "☁️  Building and deploying a new version of pilot-discovery..."
-  GOOS=linux go build -o pilot-discovery pilot/cmd/pilot-discovery/main.go
-  if [ "$?" = "0" ]; then
-    bosh scp pilot-discovery istio-control:/tmp/
-    bosh ssh istio-control -c "sudo mv /tmp/pilot-discovery /var/vcap/packages/pilot/bin/pilot-discovery; sudo /var/vcap/bosh/bin/monit restart pilot-discovery"
-    echo "👩‍✈️ Done!"
-  else
-    printf "🚨 Wee woo wee woo 🚨\nCould not compile Pilot!\nMake sure you're in the pilot directory, and there are no compilation errors.\n" 1>&2
-  fi
-}
+alias ship_copilot="ship_it copilot-server istio-control copilot"
+alias ship_pilot="ship_it pilot-discovery istio-control pilot-discovery"
+alias ship_policy_server="ship_it policy-server api policy-server"
+alias ship_policy_server_internal="ship_it policy-server-internal api policy-server-internal"
 
 function restart_envoy(){
   bosh ssh istio-router -c "sudo /var/vcap/bosh/bin/monit restart envoy"
