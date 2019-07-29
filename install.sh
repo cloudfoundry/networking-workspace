@@ -399,6 +399,13 @@ all_the_repos() {
 
   # Norsk Config -- for OSL
   clone_if_not_exist "git@github.com:pivotal-cf/norsk-config" "${GOPATH}/src/github.com/pivotal-cf/norsk-config"
+
+  # Norsk repo for running OSL pipeline tasks locally
+  clone_if_not_exist "git@github.com:pivotal-cf/norsk.git" "${HOME}/workspace/norsk"
+
+  # Envoy OSL scripts
+  clone_if_not_exist "git@github.com:pivotal/envoy-for-istio-release-osl.git" "${HOME}/workspace/envoy-for-istio-release-osl"
+
 }
 
 main "$@"
