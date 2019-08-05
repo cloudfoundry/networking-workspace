@@ -13,7 +13,7 @@ authors:
   dm: David McClure; dmcclure
   ex: Edwin Xie; exie
   gr: Gabe Rosenhouse; grosenhouse
-  jp: Jeff Pak
+  jp: Jeff Pak; jpak
   jmp: Joseph Palermo; jpalermo
   kk: Kevin Kelani; kkelani
   kds: Kauana dos Santos; kdossantos
@@ -27,6 +27,3 @@ authors:
   uu: Utako Ueda; uueda
 email:
   domain: pivotal.io
-
-email_addresses:
-  jp: jeffrey.pak@dell.com
