@@ -34,6 +34,7 @@ main() {
 
     #kubectl aliases
     alias k="kubectl"
+    complete -F __start_kubectl k #enable bash auto-completion for k
   }
 
   setup_environment() {
@@ -57,11 +58,6 @@ main() {
     eval "$(rbenv init -)"
   }
 
-  setup_aws() {
-    # set awscli auto-completion
-    complete -C aws_completer aws
-  }
-
   setup_fasd() {
     local fasd_cache
     fasd_cache="$HOME/.fasd-init-bash"
@@ -76,6 +72,8 @@ main() {
 
   setup_completions() {
     [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+    complete -C aws_completer aws
+    source <(kubectl completion bash)
   }
 
   setup_direnv() {
@@ -136,7 +134,6 @@ main() {
         base16
         environment
         rbenv
-        aws
         fasd
         completions
         direnv
