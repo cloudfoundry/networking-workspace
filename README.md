@@ -23,6 +23,7 @@ lyon
 bayside
 vicente
 haight
+zorro
 [other machines you might want to add]
 
 LA:
