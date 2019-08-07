@@ -240,7 +240,7 @@ istio_docker() {
   local image_id
   image_id=$(docker images -f reference=istio/ci --format "{{.ID}}" | head -n1)
 
-  docker run -u root -it --cap-add=NET_ADMIN -v "${istio_dir}":/go/src/istio.io/istio "${image_id}" /bin/bash
+  docker run -u root -it --cap-add=NET_ADMIN -v /var/run/docker.sock:/var/run/docker.sock -v "${istio_dir}":/go/src/istio.io/istio "${image_id}" /bin/bash
 }
 
 default_hours() {
