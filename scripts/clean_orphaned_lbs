@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# This script is used to remove target-pools, forwarding-rules and health-checks that are oprhaned when we delete clusters on k8s.
+set -eu
+
+# function delete_lb {
+#   local name=$1
+#   echo "deleting $name"
+#   gcloud compute forwarding-rules delete $name --region=us-central1 --quiet
+#   gcloud compute target-pools delete $name --region=us-central1 --quiet
+# }
+
+# export -f delete_lb
+# echo "Deleting orphaned load balancers (which do not have a - in the name)..."
+
+# gcloud compute target-pools list --flatten=instances --filter="region:(us-central1)" --format=json | jq -r .[].name > /tmp/targetpools_withinstances
+# gcloud compute target-pools list --filter="region:(us-central1)" --format=json | jq -r .[].name > /tmp/targetpools_noinstances
+# diff -u /tmp/targetpools_withinstances /tmp/targetpools_noinstances | grep -v '\-' | grep '^+' | sed -e 's:+::g' | xargs -I {} -P8 bash -c 'delete_lb {}'
+
+# rm /tmp/targetpools_withinstances
+# rm /tmp/targetpools_noinstances
+
+gcloud compute target-pools list --filter="region:(us-central1)" --format=json \
+  | jq -r '.[] | select((.healthChecks | length) > 0) | .healthChecks | .[]' \
+  | xargs basename | sort > /tmp/inuse_healthchecks
+gcloud compute http-health-checks list --format=json | jq -r .[].name > /tmp/all_healthchecks
+
+diff -u /tmp/inuse_healthchecks /tmp/all_healthchecks | grep "k8s-" | grep '^+' | sed -e 's:+::g' | xargs -I {} -P8 gcloud compute http-health-checks delete {} --quiet
+echo "Complete!"
