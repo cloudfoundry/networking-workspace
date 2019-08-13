@@ -230,7 +230,11 @@ install_ruby() {
   ln -sf $(pwd)/gemrc ${HOME}/.gemrc
 
   echo "Install the bundler gem..."
-  gem install bundler
+  gem install bundler -v 1.17.3
+  BUNDLER_VERSION="$(bundler --version | cut -d' ' -f3)"
+  if [[ $(echo "${BUNDLER_VERSION}" | cut -d'.' -f1) -eq '2' ]]; then
+    gem uninstall bundler -v "${BUNDLER_VERSION}"
+  fi
 }
 
 setup_ssh() {
