@@ -414,8 +414,10 @@ cf_target() {
 
   if [ "$env" = "local" ] || [ "$env" = "lite" ]; then
     password=$(grep cf_admin_password "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
+    uaa_password=$(grep uaa_admin_client_secret "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
   else
     password=$(credhub get -n "/bosh-${env}/cf/cf_admin_password" | bosh int --path /value -)
+    uaa_password=$(credhub get -n "/bosh-${env}/cf/uaa_admin_client_secret" | bosh int --path /value -)
   fi
 
   if [[ "$(lookup_env ${1})" = "${HOME}/workspace/deployments-routing/${1}/bbl-state" ]]; then
@@ -432,6 +434,8 @@ cf_target() {
 
   cf api "api.${system_domain}" --skip-ssl-validation
   cf auth admin "${password}"
+  uaac target "login.${system_domain}" --skip-ssl-validation
+  uaac token client get admin -s "${uaa_password}"
 }
 
 gobosh_target() {
