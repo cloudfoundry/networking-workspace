@@ -411,9 +411,8 @@ all_the_repos() {
   # Norsk repo for running OSL pipeline tasks locally
   clone_if_not_exist "git@github.com:pivotal-cf/norsk.git" "${HOME}/workspace/norsk"
 
-  # Envoy OSL scripts
-  clone_if_not_exist "git@github.com:pivotal/envoy-for-istio-release-osl.git" "${HOME}/workspace/envoy-for-istio-release-osl"
-
+  # Istio Envoy OSL scripts
+  clone_if_not_exist "git@github.com:pivotal/istio-envoy-osl.git" "${HOME}/workspace/istio-envoy-osl"
 }
 
 main "$@"
