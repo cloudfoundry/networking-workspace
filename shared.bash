@@ -853,5 +853,117 @@ function update_fly() {
   fi
 }
 
+function portable_open() {
+  if [[ "$OSTYPE" == "darwin" ]]; then
+    open "$1"
+  else
+    xdg-open "$1" > /dev/null 2>&1
+  fi
+}
+
+function portable_copy() {
+  if [[ "$OSTYPE" == "darwin" ]]; then
+    echo "$1" | pbcopy
+  else
+    echo "$1" | xclip -selection clipboard
+  fi
+}
+
+function main() {
+   remote_name=${1:-origin}
+
+   remote_url=$(git remote get-url --all ${remote_name})
+   parsed_url=$(./parse-git-url.py ${remote_url})
+
+   echo "Opening ${parsed_url}... If not opened the value is copied to your clipboard."
+
+   portable_open "${parsed_url}" || true
+   portable_copy "${parsed_url}" || true
+}
+
+function portable_open() {
+  if [[ "$OSTYPE" == "darwin" ]]; then
+    open "$1"
+  else
+    xdg-open "$1" > /dev/null 2>&1
+  fi
+}
+
+function portable_copy() {
+  if [[ "$OSTYPE" == "darwin" ]]; then
+    echo "$1" | pbcopy
+  else
+    echo "$1" | xclip -selection clipboard
+  fi
+}
+
+function main() {
+   remote_name=${1:-origin}
+
+   remote_url=$(git remote get-url --all ${remote_name})
+   parsed_url=$(./parse-git-url.py ${remote_url})
+
+   echo "Opening ${parsed_url}... If not opened the value is copied to your clipboard."
+
+   portable_open "${parsed_url}" || true
+   portable_copy "${parsed_url}" || true
+}
+
+function portable_open() {
+  if [[ "$OSTYPE" == "darwin" ]]; then
+    open "$1"
+  else
+    xdg-open "$1" > /dev/null 2>&1
+  fi
+}
+
+function portable_copy() {
+  if [[ "$OSTYPE" == "darwin" ]]; then
+    echo "$1" | pbcopy
+  else
+    echo "$1" | xclip -selection clipboard
+  fi
+}
+
+function main() {
+   remote_name=${1:-origin}
+
+   remote_url=$(git remote get-url --all ${remote_name})
+   parsed_url=$(./parse-git-url.py ${remote_url})
+
+   echo "Opening ${parsed_url}... If not opened the value is copied to your clipboard."
+
+   portable_open "${parsed_url}" || true
+   portable_copy "${parsed_url}" || true
+}
+
+function portable_open() {
+  if [[ "$OSTYPE" == "darwin18" ]]; then
+    open "$1"
+  else
+    xdg-open "$1" > /dev/null 2>&1
+  fi
+}
+
+function portable_copy() {
+  if [[ "$OSTYPE" == "darwin18" ]]; then
+    echo "$1" | pbcopy
+  else
+    echo "$1" | xclip -selection clipboard
+  fi
+}
+
+function open_git_homepage() {
+   remote_name=${1:-origin}
+
+   remote_url=$(git remote get-url --all ${remote_name})
+   parsed_url=$(${HOME}/workspace/networking-workspace/scripts/parse_git_url ${remote_url})
+
+   echo "Opening ${parsed_url} If not opened the value is copied to your clipboard."
+
+   portable_open "${parsed_url}" || true
+   portable_copy "${parsed_url}" || true
+}
+
 source $HOME/workspace/networking-workspace/custom-commands.sh
 
