@@ -953,7 +953,7 @@ function portable_copy() {
   fi
 }
 
-function open_git_homepage() {
+function open-repo-homepage() {
    remote_name=${1:-origin}
 
    remote_url=$(git remote get-url --all ${remote_name})
