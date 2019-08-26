@@ -205,7 +205,6 @@ install_sshb0t() {
   echo "sshb0t installed!"
 
   sshb0t --once \
-    --user tstannard \
     --user KauzClay \
     --user jeffpak \
     --user angelachin \
