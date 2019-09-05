@@ -424,6 +424,10 @@ cf_target() {
     workspace="routing"
   fi
 
+  if [[ "$(lookup_env ${1})" = "${HOME}/workspace/networking-oss-deployments/environments/${1}/bbl-state" ]]; then
+    workspace="routing"
+  fi
+
   if [ "$workspace" = "routing" ]; then
     system_domain="${env}.routing.cf-app.com"
   elif [ "$env" = "local" ] || [ "$env" = "lite" ]; then
