@@ -1,0 +1,48 @@
+{
+  "ConfigVersion": 3,
+  "Target": "",
+  "APIVersion": "",
+  "AuthorizationEndpoint": "",
+  "DopplerEndPoint": "",
+  "UaaEndpoint": "",
+  "RoutingAPIEndpoint": "",
+  "AccessToken": "",
+  "SSHOAuthClient": "ssh-proxy",
+  "UAAOAuthClient": "cf",
+  "UAAOAuthClientSecret": "",
+  "UAAGrantType": "",
+  "RefreshToken": "",
+  "OrganizationFields": {
+    "GUID": "",
+    "Name": "",
+    "QuotaDefinition": {
+      "guid": "",
+      "name": "",
+      "memory_limit": 0,
+      "instance_memory_limit": 0,
+      "total_routes": 0,
+      "total_services": 0,
+      "non_basic_services_allowed": false,
+      "app_instance_limit": 0,
+      "total_reserved_route_ports": 0
+    }
+  },
+  "SpaceFields": {
+    "GUID": "",
+    "Name": "",
+    "AllowSSH": false
+  },
+  "SSLDisabled": false,
+  "AsyncTimeout": 0,
+  "Trace": "",
+  "ColorEnabled": "",
+  "Locale": "",
+  "PluginRepos": [
+    {
+      "Name": "CF-Community",
+      "URL": "https://plugins.cloudfoundry.org"
+    }
+  ],
+  "MinCLIVersion": "",
+  "MinRecommendedCLIVersion": ""
+}

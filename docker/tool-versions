@@ -1,0 +1,16 @@
+adr-tools 3.0.0
+cf 6.46.0
+dep 0.5.4
+eksctl 0.4.2
+golang 1.12.9
+helm 2.14.3
+istioctl 1.2.4
+kubectl 1.15.3
+nodejs 12.9.0
+packer 1.4.3
+protoc 3.9.1
+ruby 2.6.3
+shellcheck 0.4.6
+sqlite 3.29.0
+terraform 0.12.7
+yarn 1.17.3
