@@ -401,7 +401,7 @@ all_the_repos() {
   clone_if_not_exist "git@github.com:pivotal/pivotal-networking-ci" "${GOPATH}/src/github.com/pivotal/pivotal-networking-ci"
 
   # PKS Networking Env Metadata -- env info for pivotal ci
-  clone_if_not_exist "git@github.com:pivotal/pks-networking-env-metadata" "${GOPATH}/src/github.com/pivotal/pks-networking-env-metadata"
+  clone_if_not_exist "git@github.com:pivotal/pks-networking-env-metadata" "${GOPATH}/workspace/pks-networking-env-metadata"
 
   # Norsk Config -- for OSL
   clone_if_not_exist "git@github.com:pivotal-cf/norsk-config" "${HOME}/workspace/norsk-config"

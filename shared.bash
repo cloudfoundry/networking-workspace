@@ -287,7 +287,7 @@ set-git-keys() {
 
 function pks_login() {
   local environment=$1
-  local path_to_metadata="${HOME}/go/src/github.com/pivotal/pks-networking-env-metadata/${environment}/metadata.json"
+  local path_to_metadata="${HOME}/workspace/pks-networking-env-metadata/${environment}/metadata.json"
 
   local pks_api=$(jq -r .pks_api.url "${path_to_metadata}")
   local pks_user=$(jq -r .pks_api.uaa_admin_user "${path_to_metadata}")
@@ -303,7 +303,7 @@ function pks_login() {
 
 function pks_metadata() {
   local environment=$1
-  cat $HOME/go/src/github.com/pivotal/pks-networking-env-metadata/$environment/metadata.json | jq .
+  cat $HOME/workspace/pks-networking-env-metadata/$environment/metadata.json | jq .
 }
 
 function current_branch() { # Gets current branch
@@ -776,7 +776,7 @@ function good_morning(){
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pivotal-networking-ci"
 
   # PKS Networking Env Metadata-- env info for pivotal ci
-  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pks-networking-env-metadata"
+  pull_if_no_dirty_changes "${GOPATH}/workspace/pks-networking-env-metadata"
 
   # PKS Networking Env Metadata-- env info for pivotal ci
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal-cf/norsk-config"
