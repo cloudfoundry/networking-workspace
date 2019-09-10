@@ -386,6 +386,9 @@ all_the_repos() {
   # Cf Networking Helpers: Helpers for running tests?
   clone_if_not_exist "https://github.com/cloudfoundry/cf-networking-helpers" "${HOME}/workspace/cf-networking-helpers"
 
+  # Istio Sample Apps
+  clone_if_not_exist "git@github.com:GoogleCloudPlatform/istio-samples.git" "${HOME}/workspace/istio-samples"
+
   # Pivotal Only ==============================================================================================
 
   # Routing Support Notes: List of support tickets, past and present, and a handy template to start your own.
