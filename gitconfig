@@ -3,6 +3,7 @@
   br = branch
   ci = commit
   co = checkout
+  cos = "checkout --recurse-submodules"
   di = diff
   drb = rebase -i --exec 'git duet-commit --amend --reset-author'
   ds = "diff --staged"
