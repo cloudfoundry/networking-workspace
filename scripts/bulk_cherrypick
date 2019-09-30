@@ -1,0 +1,53 @@
+#! /bin/bash
+
+REPO=$1
+COMMIT=$2
+shift
+shift
+BRANCHES=$@
+
+RED='\033[0;31m'
+NC='\033[0m'
+
+
+
+cd $REPO 2> /dev/null || { echo "Directory \"$REPO\" does not exist." && exit 1 ; }
+
+INITIAL_BRANCH=$(git branch --show-current)
+
+for b in $BRANCHES; do
+  git show-ref --verify --quiet refs/heads/$b
+  if [ $? != 0 ]; then
+    echo "Branch \"$b\" does not exist."
+    exit 1
+  fi
+done
+
+echo "Using repo: $(pwd)"
+echo
+git show --stat $COMMIT
+
+echo
+read -p "Cherry-pick this commit onto branches $(for b in $BRANCHES ; do printf "\"$b\" "; done). Continue? [y/N]"
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  echo "Starting cherry-picking"
+  echo
+else
+  echo "Bailing out"
+  exit 2
+fi
+
+for b in $BRANCHES; do
+  git checkout $b 2> /dev/null > /dev/null
+
+  git cherry-pick $COMMIT 2> /dev/null >/dev/null
+  if [ $? != 0 ]; then
+    git cherry-pick --abort
+    >&2 printf "${RED}Failed to backport onto branch \"$b\".${NC}\n"
+  else
+    echo "Successfully backported onto branch \"$b\"."
+  fi
+done
+
+git checkout $INITIAL_BRANCH 2> /dev/null > /dev/null
