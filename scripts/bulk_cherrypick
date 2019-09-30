@@ -1,11 +1,14 @@
 #! /bin/bash
 
+set -eu
+
 REPO=$1
 COMMIT=$2
+PREFIX=$3
+shift
 shift
 shift
 BRANCHES=$@
-
 RED='\033[0;31m'
 NC='\033[0m'
 
@@ -39,15 +42,19 @@ else
 fi
 
 for b in $BRANCHES; do
+  bb="$PREFIX-$b"
   git checkout $b 2> /dev/null > /dev/null
+  git checkout -b $bb > /dev/null
 
-  git cherry-pick $COMMIT 2> /dev/null >/dev/null
+  git cherry-pick $COMMIT >/dev/null
   if [ $? != 0 ]; then
     git cherry-pick --abort
     >&2 printf "${RED}Failed to backport onto branch \"$b\".${NC}\n"
   else
     echo "Successfully backported onto branch \"$b\"."
   fi
+
+  git push -u origin $bb
 done
 
 git checkout $INITIAL_BRANCH 2> /dev/null > /dev/null
