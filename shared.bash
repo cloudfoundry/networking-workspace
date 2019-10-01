@@ -223,24 +223,19 @@ istio_docker() {
 
   if [[ -z "${istio_dir}" ]]; then
     echo "WARNING: istio_dir not set"
-    echo "Setting istio directory to ~/workspace/istio-release/src/istio.io/istio"
+    echo "Setting istio directory to ${GOPATH}/src/istio.io/istio"
     echo "You may optionally pass your preferred istio directory as the first argument 😀 "
-    istio_dir="${HOME}/workspace/istio-release/src/istio.io/istio"
+    istio_dir="${GOPATH}/src/istio.io/istio"
   else
     echo "istio_directory set to ${istio_dir}"
   fi
 
-  echo "Getting istio/ci tags..."
-  local tag
-  tag=$(curl -s "https://hub.docker.com/v2/repositories/istio/ci/tags/" | jq -r '.results|.[0].name')
+  local image
+  image="gcr.io/istio-testing/istio-builder:latest"
+  echo "Getting most recent $image..."
+  docker pull $image
 
-  echo "Getting most recent istio/ci images..."
-  docker pull istio/ci:"${tag}"
-
-  local image_id
-  image_id=$(docker images -f reference=istio/ci --format "{{.ID}}" | head -n1)
-
-  docker run -u root -it --cap-add=NET_ADMIN -v /var/run/docker.sock:/var/run/docker.sock -v "${istio_dir}":/go/src/istio.io/istio "${image_id}" /bin/bash
+  docker run -u root -it --cap-add=NET_ADMIN -v /var/run/docker.sock:/var/run/docker.sock -v "${istio_dir}":/go/src/istio.io/istio "${image}" /bin/bash
 }
 
 default_hours() {
