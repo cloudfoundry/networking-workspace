@@ -96,16 +96,21 @@ main() {
 
   GOPATH="${HOME}/go" all_the_repos
 
+  echo "Downloading additional command line completion scripts"
+  ln -sf /Applications/Docker.app/Contents/Resources/etc/docker.bash-completion $(brew --prefix)/etc/bash_completion.d/docker
+  ln -sf /Applications/Docker.app/Contents/Resources/etc/docker-machine.bash-completion $(brew --prefix)/etc/bash_completion.d/docker-machine
+  ln -sf /Applications/Docker.app/Contents/Resources/etc/docker-compose.bash-completion $(brew --prefix)/etc/bash_completion.d/docker-compose
+
   echo "Configuring databases..."
   ./scripts/setup_routing_dbs
 
   install_tmuxfiles
 
-
   echo "Set screensaver timeout to 10 minutes..."
   defaults -currentHost write com.apple.screensaver idleTime 600
 
   echo "updating all git repos to use 'git co-author'"
+  git solo br
   export GIT_DUET_CO_AUTHORED_BY=1
   find ~/workspace/ -type d -name '.git' -exec sh -c 'cd {} && cd .. && git duet > /dev/null && git init' \;
 
