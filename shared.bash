@@ -75,6 +75,20 @@ main() {
     complete -C aws_completer aws
     source <(kubectl completion bash)
     complete -W "\`find . -iname \"*akefil*\" | grep -v vendor | xargs -I {} grep -hoE '^[a-zA-Z0-9_.-]+:([^=]|$)' {} | sed 's/[^a-zA-Z0-9_.-]*$//' | sort -u\`" make
+    _istioctl()
+    {
+        local cur=${COMP_WORDS[COMP_CWORD]}
+        local prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+        local command=${COMP_LINE%$cur}
+
+        local options=`$command --help | awk '/Available Commands/,/^$/' | tail -n +2 | awk '{print $1}'`
+
+        options="$options `$command --help | grep -oh \"\-\-\w*\"`"
+
+        COMPREPLY=( $(compgen -W "$options" -- $cur) )
+    }
+    complete -F _istioctl istioctl
   }
 
   setup_direnv() {
