@@ -403,7 +403,7 @@ all_the_repos() {
   clone_if_not_exist "git@github.com:pivotal/k8s-istio-resource-generator" "${GOPATH}/src/github.com/pivotal/k8s-istio-resource-generator"
 
   # PKS Service Mesh repo
-  clone_if_not_exist "git@github.com:pivotal/pivotal-service-mesh" "${GOPATH}/src/github.com/pivotal/pivotal-service-mesh"
+  clone_if_not_exist "git@github.com:pivotal/ingress-router" "${GOPATH}/src/github.com/pivotal/ingress-router"
 
   # Pivotal Networking CI -- pipeline and tasks for pivotal ci
   clone_if_not_exist "git@github.com:pivotal/pivotal-networking-ci" "${GOPATH}/src/github.com/pivotal/pivotal-networking-ci"

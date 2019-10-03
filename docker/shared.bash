@@ -748,7 +748,7 @@ function good_morning(){
   pull_if_no_dirty_changes "${HOME}/workspace/k8s-istio-resource-generator"
 
   # PKS service mesh
-  pull_if_no_dirty_changes "${HOME}/workspace/pivotal-service-mesh"
+  pull_if_no_dirty_changes "${HOME}/workspace/ingress-router"
 
   # Pivotal Networking CI -- pipeline and tasks for pivotal ci
   pull_if_no_dirty_changes "${HOME}/workspace/pivotal-networking-ci"
@@ -880,7 +880,7 @@ all_the_repos() {
   clone_if_not_exist "git@github.com:pivotal/k8s-istio-resource-generator" "${HOME}/workspace/k8s-istio-resource-generator"
 
   # PKS Service Mesh repo
-  clone_if_not_exist "git@github.com:pivotal/pivotal-service-mesh" "${HOME}/workspace/pivotal-service-mesh"
+  clone_if_not_exist "git@github.com:pivotal/ingress-router" "${HOME}/workspace/ingress-router"
 
   # Pivotal Networking CI -- pipeline and tasks for pivotal ci
   clone_if_not_exist "git@github.com:pivotal/pivotal-networking-ci" "${HOME}/workspace/pivotal-networking-ci"

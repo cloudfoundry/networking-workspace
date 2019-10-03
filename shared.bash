@@ -780,7 +780,7 @@ function good_morning(){
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/k8s-istio-resource-generator"
 
   # PKS service mesh
-  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pivotal-service-mesh"
+  pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/ingress-router"
 
   # Pivotal Networking CI -- pipeline and tasks for pivotal ci
   pull_if_no_dirty_changes "${GOPATH}/src/github.com/pivotal/pivotal-networking-ci"
