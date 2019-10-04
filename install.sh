@@ -110,8 +110,7 @@ main() {
   defaults -currentHost write com.apple.screensaver idleTime 600
 
   echo "updating all git repos to use 'git co-author'"
-  git solo br
-  export GIT_DUET_CO_AUTHORED_BY=1
+  export GIT_DUET_CO_AUTHORED_BY=0
   find ~/workspace/ -type d -name '.git' -exec sh -c 'cd {} && cd .. && git duet > /dev/null && git init' \;
 
   echo "Workstation setup complete — open a new window to apply all settings! 🌈"
