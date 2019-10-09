@@ -18,6 +18,7 @@ main() {
     alias gup="git pull -r"
     alias gp="git push"
     alias ga="git add"
+    git config --global alias.yolo '!git commit -m "$(curl -s whatthecommit.com/index.txt)"'
 
     alias gbt="gobosh_target"
     alias gbtl="gobosh_target_lite"
