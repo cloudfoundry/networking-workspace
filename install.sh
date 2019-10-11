@@ -272,19 +272,19 @@ setup_git() {
   echo "Symlink the git-authors file to .git-authors..."
   ln -sf $(pwd)/git-authors ${HOME}/.git-authors
 
-  echo "Copy the shared.bash file into .bash_profile"
+  echo "Symlink the shared.bash file into .bash_profile"
   ln -sf $(pwd)/shared.bash ${HOME}/.bash_profile
 
   echo "Copy the gitconfig file into ~/.gitconfig..."
   cp -rf $(pwd)/gitconfig ${HOME}/.gitconfig
 
-  echo "Copy the inputrc file into ~/.inputrc..."
+  echo "Symlink the inputrc file into ~/.inputrc..."
   ln -sf $(pwd)/inputrc ${HOME}/.inputrc
 
-  echo "Link global .gitignore"
+  echo "Symlink global .gitignore"
   ln -sf $(pwd)/global-gitignore ${HOME}/.global-gitignore
 
-  echo "link global .git-prompt-colors.sh"
+  echo "Symlink global .git-prompt-colors.sh"
   ln -sf $(pwd)/git-prompt-colors.sh ${HOME}/.git-prompt-colors.sh
 }
 
