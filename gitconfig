@@ -19,6 +19,7 @@
   sta = stash
   su = submodule update --init --recursive
   unstage = "reset HEAD"
+  pra = pull --rebase --autostash
 [core]
   editor = nvim
   excludesfile = ~/.shared-gitignore
