@@ -391,7 +391,37 @@ function toolsmiths() {
   echo "      to create a service account with a key for toolsmiths env."
 }
 
+function export-smith-token() {
+  local email=$1
 
+  if [[ -z ${email} ]]; then
+    echo "Usage: $0 [LastPass email or git author initials]"
+    return
+  fi
+
+  if ! [[ $(lpass status) =~ $email ]]; then
+    lpass login "$email"
+  fi
+
+  token_cmd=$(lpass show --notes 'Shared-CF-Networking (Pivotal)/concourse_toolsmiths_api_key')
+  eval "${token_cmd}"
+}
+
+function target-smith-deployment() {
+  local smith_env=${1:-$env}
+
+  if [[ -z ${smith_env} ]]; then
+    echo "Usage: $0 [claimed from smith env name]"
+    echo 'If env is not provided the `env` environment variable will be used, if it is empty, the execution will be aborted'
+    return
+  fi
+  
+  echo "Retreving the deployment name..."
+  d=$(smith -e ${smith_env} bosh -- deployments --column "Name" --json | jq ".Tables[0].Rows[0].name" -r)
+  echo "Deployment is ${d}"
+  echo "Making smith-bosh alias"
+  alias smith-bosh="smith -e ${smith_env} bosh -- -d ${d}"
+}
 # NEEDS CONSOLIDATION WITH ROUTING SCRIPTS
 
 cf_target() {
