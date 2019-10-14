@@ -275,6 +275,8 @@ setup_git() {
   echo "Symlink the shared.bash file into .bash_profile"
   ln -sf $(pwd)/shared.bash ${HOME}/.bash_profile
 
+  # Don't symlink this one because `git duet` will add
+  # things to it and you don't want to push these changes.
   echo "Copy the gitconfig file into ~/.gitconfig..."
   cp -rf $(pwd)/gitconfig ${HOME}/.gitconfig
 
