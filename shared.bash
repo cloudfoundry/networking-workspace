@@ -408,6 +408,7 @@ function export-smith-token() {
 }
 
 function target-smith-deployment() {
+  set -e
   local smith_env=${1:-$env}
 
   if [[ -z ${smith_env} ]]; then
