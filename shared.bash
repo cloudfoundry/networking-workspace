@@ -408,17 +408,20 @@ function export-smith-token() {
 }
 
 function target-smith-deployment() {
-  set -e
   local smith_env=${1:-$env}
 
   if [[ -z ${smith_env} ]]; then
     echo "Usage: $0 [claimed from smith env name]"
     echo 'If env is not provided the `env` environment variable will be used, if it is empty, the execution will be aborted'
-    return
+    return 1
   fi
-  
+
   echo "Retreving the deployment name..."
   d=$(smith -e ${smith_env} bosh -- deployments --column "Name" --json | jq ".Tables[0].Rows[0].name" -r)
+  if [[ -z ${d} ]]; then
+    echo "Looks like your API key is not exported, try to run export-smith-token first"
+    return 1
+  fi
   echo "Deployment is ${d}"
   echo "Making smith-bosh alias"
   alias smith-bosh="smith -e ${smith_env} bosh -- -d ${d}"
