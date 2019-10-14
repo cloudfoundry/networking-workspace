@@ -49,5 +49,3 @@
 [user]
 	email = cf-networking@pivotal.io
 	name = CF Networking Team
-[pull]
-	rebase = true
