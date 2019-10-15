@@ -10,6 +10,15 @@ You can exit the shell at any time without exiting the container.
 
 To actually kill the container, run `./kill-container.sh`.
 
+The `start-container.sh` script will assume you have all your project folders
+inside `~/workspace` on your host machine and bind-mount the workspace folder
+into the container.
+
+The script also automatically binds port 4567 inside the container to the
+host network.
+
+`start-container.sh` will pass additional flags to the `docker run` command itself.
+
 
 ## Features
 
@@ -34,8 +43,11 @@ To actually kill the container, run `./kill-container.sh`.
 - VPN access does not support alternative TFA methods
   - Currently there isn't a method of getting an OAuth token from Okta if we
     use the Browser-based flow
+- Error messages show up when setting up the VPN: `Cannot open "/proc/sys/net/ipv4/route/flush": Read-only file system`
+  - Apparently it's not really an issue. You can use the VPN as normal.
 - Permission denied on bind-mounted workspace folder?
   - The container expects the UID of the UNIX user on your host to be 501.
   - To fix this, either change the UID of the user on your host or change
     the UID of the user inside the container once inside. You may have to
     login to the container as root.
+- Docker support inside the container is not yet tested
