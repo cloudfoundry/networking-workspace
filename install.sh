@@ -109,6 +109,9 @@ main() {
   echo "Set screensaver timeout to 10 minutes..."
   defaults -currentHost write com.apple.screensaver idleTime 600
 
+  echo "Configuring IDE preferences..."
+  setup_pivotal_ide_prefs
+
   echo "updating all git repos to use 'git co-author'"
   export GIT_DUET_CO_AUTHORED_BY=0
   find ~/workspace/ -type d -name '.git' -exec sh -c 'cd {} && cd .. && git duet > /dev/null && git init' \;
@@ -290,6 +293,13 @@ setup_git() {
   ln -sf $(pwd)/git-prompt-colors.sh ${HOME}/.git-prompt-colors.sh
 }
 
+setup_pivotal_ide_prefs() {
+  pushd ~/workspace/pivotal_ide_prefs > /dev/null
+	  ./cli/bin/ide_prefs install --ide=rubymine
+	  ./cli/bin/ide_prefs install --ide=goland
+  popd > /dev/null
+}
+
 all_the_repos() {
   echo "Cloning all of the repos we work on..."
 
@@ -420,6 +430,9 @@ all_the_repos() {
 
   # Istio Envoy OSL scripts
   clone_if_not_exist "git@github.com:pivotal/istio-envoy-osl.git" "${HOME}/workspace/istio-envoy-osl"
+
+  # Pivotal Intellij IDE Preferences
+  clone_if_not_exist "git@github.com:pivotal-legacy/pivotal_ide_prefs.git" "${HOME}/workspace/pivotal_ide_prefs"
 }
 
 main "$@"
