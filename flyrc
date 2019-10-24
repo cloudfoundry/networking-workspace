@@ -1,18 +1,18 @@
 targets:
   ga:
-    api: https://routing.ci.cf-app.com
+    api: https://networking.ci.cf-app.com/
     team: ga
   gap:
-    api: https://pivotal-networking.ci.cf-app.com
+    api: https://ci.networking.family/
     team: ga
 
   psm:
-    api: https://pivotal-networking.ci.cf-app.com
-    team: psm
+    api: https://ci.networking.family/
+    team: ingress-router
 
   cf-mesh:
-    api: https://routing.ci.cf-app.com
+    api: https://networking.ci.cf-app.com/
     team: cf-mesh
   cf-mesh-p:
-    api: https://pivotal-networking.ci.cf-app.com
+    api: https://ci.networking.family/
     team: cf-mesh
