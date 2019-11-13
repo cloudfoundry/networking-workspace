@@ -355,9 +355,7 @@ function server() { # Create webserver from current directory
   echo "Links to give out:"
   ifconfig | grep "inet.*netmask" | sed "s/inet \(.*\) netmask.*/http:\/\/\1:$port\//g"
   sleep 1 && open "http://localhost:${port}/" &
-  # Set the default Content-Type to `text/plain` instead of `application/octet-stream`
-  # And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
-  python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port";
+  docker run -p $port:80 -v $(pwd):/usr/share/nginx/html jrelva/nginx-autoindex
 }
 
 function nuke() { # Straight up murders all processes matching first arg
