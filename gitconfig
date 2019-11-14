@@ -21,6 +21,7 @@
   unstage = "reset HEAD"
   pra = pull --rebase --autostash
 [core]
+  hooksPath = ~/workspace/git-hooks-core
   editor = nvim
   excludesfile = ~/.shared-gitignore
 [url "git@gist.github.com:"]

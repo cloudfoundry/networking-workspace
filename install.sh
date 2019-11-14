@@ -283,6 +283,9 @@ setup_git() {
   echo "Copy the gitconfig file into ~/.gitconfig..."
   cp -rf $(pwd)/gitconfig ${HOME}/.gitconfig
 
+  echo "Installing cred-alert-cli"
+  install_credalert
+
   echo "Symlink the inputrc file into ~/.inputrc..."
   ln -sf $(pwd)/inputrc ${HOME}/.inputrc
 
@@ -433,6 +436,13 @@ all_the_repos() {
 
   # Pivotal Intellij IDE Preferences
   clone_if_not_exist "git@github.com:pivotal-legacy/pivotal_ide_prefs.git" "${HOME}/workspace/pivotal_ide_prefs"
+}
+
+function install_credalert() {
+  # https://sites.google.com/a/pivotal.io/cloud-foundry/process/security/cred-alert-cli-instructions
+  clone_if_not_exist "https://github.com/pivotal-cf/git-hooks-core.git" "${HOME}/workspace/git-hooks-core"
+
+  # hook is added in gitconfig
 }
 
 main "$@"
