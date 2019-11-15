@@ -118,6 +118,7 @@ COPY pks-linux-amd64-1.5.0-build.291 /usr/local/bin/pks
 RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.1.0/bosh-cli-6.1.0-linux-amd64 \
  && wget -O /usr/local/bin/bbl https://github.com/cloudfoundry/bosh-bootloader/releases/download/v8.2.14/bbl-v8.2.14_linux_x86-64 \
  && wget -O /usr/local/bin/om https://github.com/pivotal-cf/om/releases/download/4.1.0/om-linux-4.1.0 \
+ && wget -O /usr/local/bin/pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v0.0.68/pivnet-linux-amd64-0.0.68 \
  && wget -O /tmp/credhub.tgz https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.6.0/credhub-linux-2.6.0.tgz \
  && wget -O /tmp/codeserver.tgz https://github.com/cdr/code-server/releases/download/1.1156-vsc1.33.1/code-server1.1156-vsc1.33.1-linux-x64.tar.gz \
  && tar -xzf /tmp/credhub.tgz -C /tmp && mv /tmp/credhub /usr/local/bin/credhub \
@@ -127,7 +128,9 @@ RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/release
 
 RUN groupadd -g 2000 pivotal \
  && useradd -ms /bin/bash -u $UID -g pivotal pivotal \
- && echo 'pivotal:pivotal' | chpasswd && adduser pivotal sudo \
+ && echo 'pivotal:pivotal' | chpasswd \
+ && usermod -aG sudo pivotal \
+ && usermod -aG docker pivotal \
  && chown -R pivotal:pivotal /home/pivotal \
  && chmod 1777 /tmp
 
@@ -161,21 +164,23 @@ RUN bash -c ". $HOME/.asdf/asdf.sh \
 
 ENV GOPATH=$HOME/go
 
-RUN mkdir -pv $GOPATH/src \
+RUN mkdir -pv $HOME/go \
  && mkdir -pv $HOME/workspace \
  && mkdir -pv $HOME/.cf
 
 RUN bash -c ". $HOME/.asdf/asdf.sh \
- && go get -u github.com/direnv/direnv \
- && go get -u github.com/git-duet/git-duet/... \
- && go get -u github.com/cf-container-networking/bosh-target \
- && go get -u github.com/dbellotti/cf-target \
- && go get -u github.com/fatih/hclfmt \
- && go get -u github.com/onsi/ginkgo/ginkgo \
- && go get -u github.com/onsi/gomega \
- && go get -u github.com/maxbrunsfeld/counterfeiter \
- && go get -u github.com/kkallday/deployment-extractor \
- && go get -u github.com/sourcegraph/go-langserver"
+ && export GO111MODULE=on \
+ && go get github.com/direnv/direnv \
+ && go get github.com/git-duet/git-duet/... \
+ && go get github.com/cf-container-networking/bosh-target \
+ && go get github.com/dbellotti/cf-target \
+ && go get github.com/fatih/hclfmt \
+ && go get github.com/onsi/ginkgo/ginkgo \
+ && go get github.com/onsi/gomega \
+ && go get github.com/maxbrunsfeld/counterfeiter/v6 \
+ && go get github.com/kkallday/deployment-extractor \
+ && go get github.com/sourcegraph/go-langserver \
+ && go get sigs.k8s.io/kind@v0.5.1"
 
 RUN mkdir -pv $HOME/setup \
  && cd $HOME/setup \
