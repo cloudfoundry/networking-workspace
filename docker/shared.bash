@@ -132,7 +132,7 @@ main() {
   alias brew=":"
   export TERM=xterm-256color
   export GOPATH=~/go
-  export PATH=$GOPATH/bin:$PATH:$HOME/scripts:$HOME/workspace/deployments-routing/scripts
+  export PATH=$GOPATH/bin:$PATH:$HOME/scripts:$HOME/workspace/deployments-routing/scripts:/usr/local/kubebuilder/bin
 }
 
 if [ -f $HOME/.bashrc ]; then

@@ -121,10 +121,16 @@ RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/release
  && wget -O /usr/local/bin/pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v0.0.68/pivnet-linux-amd64-0.0.68 \
  && wget -O /tmp/credhub.tgz https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.6.0/credhub-linux-2.6.0.tgz \
  && wget -O /tmp/codeserver.tgz https://github.com/cdr/code-server/releases/download/1.1156-vsc1.33.1/code-server1.1156-vsc1.33.1-linux-x64.tar.gz \
+ && wget -O /tmp/kubebuilder.tgz https://go.kubebuilder.io/dl/2.1.0/linux/amd64 \
  && tar -xzf /tmp/credhub.tgz -C /tmp && mv /tmp/credhub /usr/local/bin/credhub \
  && tar -xzf /tmp/codeserver.tgz -C /tmp && mv /tmp/code*/code-server /usr/local/bin/code-server \
+ && tar -xzf /tmp/kubebuilder.tgz -C /tmp && mv /tmp/kubebuilder_2.1.0_linux_amd64 /usr/local/kubebuilder \
  && chmod +x /usr/local/bin/pks /usr/local/bin/bosh /usr/local/bin/bbl /usr/local/bin/om /usr/local/bin/credhub /usr/local/bin/code-server \
  && rm -rf /tmp/*
+
+# Enable the SSH server on the container
+RUN rm -f /etc/service/sshd/down
+RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 RUN groupadd -g 2000 pivotal \
  && useradd -ms /bin/bash -u $UID -g pivotal pivotal \

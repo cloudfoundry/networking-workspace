@@ -26,12 +26,8 @@ host network.
 - Many CLI tools are preinstalled (bosh, cf, pks CLI, om CLI, kubectl, fly, etc.)
 - Updated to most recent version of golang, ruby
 - VPN support
-  - ideally run this foregrounded inside a tmux window or background it somehow
-  - `cd` to `~/setup/pan-globalprotect-okta`
-  - run `python3 gp-okta.py gp-okta.conf`
-  - log in to Okta from the CLI (only SMS, Google Auth, or Push to Login TFA supported)
 - Secrets of the shared.bash without breaking your machine
-- run `code-server --port 4567` and use VS Code at `localhost:4567`
+- code-server
 - SSH agent forwarding for Linux-based hosts
 
 ## Known Issues:
@@ -50,4 +46,24 @@ host network.
   - To fix this, either change the UID of the user on your host or change
     the UID of the user inside the container once inside. You may have to
     login to the container as root.
-- Docker support inside the container is not yet tested
+
+## Workflows
+
+### Pivotal VPN
+  Ideally run this foregrounded inside a tmux window or background it somehow:
+  - `cd` to `~/setup/pan-globalprotect-okta`
+  - run `python3 gp-okta.py gp-okta.conf`
+  - log in to Okta from the CLI (only SMS, Google Auth, or Push to Login TFA supported)
+
+### VS Code
+  Run `code-server --port 4567` and use VS Code at `localhost:4567`
+
+### Using Docker or creating a local Kubernetes cluster
+  Assuming you've used the `start-container.sh` script, you should
+  be able to use Docker inside the container (but it connects
+  to the host's Docker socket).
+
+  To create a local Kubernetes cluster, run `kind create cluster` and
+  follow the instructions on the prompt. Check out the
+  [kind documentation](https://kind.sigs.k8s.io/docs/user/quick-start/)
+  for more info.
