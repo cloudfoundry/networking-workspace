@@ -408,6 +408,15 @@ all_the_repos() {
   # Istio Sample Apps
   clone_if_not_exist "git@github.com:GoogleCloudPlatform/istio-samples.git" "${HOME}/workspace/istio-samples"
 
+  # CF K8S Networking
+  clone_if_not_exist "https://github.com/cloudfoundry/cf-k8s-networking" "${HOME}/workspace/cf-k8s-networking"
+
+  # Eirini
+  clone_if_not_exist "https://github.com/cloudfoundry-incubator/eirini" "${HOME}/workspace/eirini"
+
+  # Erini BOSH Release
+  clone_if_not_exist "https://github.com/cloudfoundry-community/eirini-bosh-release" "${HOME}/workspace/eirini-bosh-release"
+
   # Pivotal Only ==============================================================================================
 
   # Routing Support Notes: List of support tickets, past and present, and a handy template to start your own.
