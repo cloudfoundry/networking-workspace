@@ -446,16 +446,18 @@ cf_target() {
   if [ "$env" = "local" ] || [ "$env" = "lite" ]; then
     password=$(grep cf_admin_password "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
     uaa_password=$(grep uaa_admin_client_secret "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
+  elif [ -f "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json" ]; then
+    password=$(jq -r '.admin_password' < "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json")
   else
     password=$(credhub get -n "/bosh-${env}/cf/cf_admin_password" | bosh int --path /value -)
     uaa_password=$(credhub get -n "/bosh-${env}/cf/uaa_admin_client_secret" | bosh int --path /value -)
   fi
 
+  [ -f "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json" ] && workspace="cf-k8s" || workspace="routing"
+
   if [[ "$(lookup_env ${1})" = "${HOME}/workspace/deployments-routing/${1}/bbl-state" ]]; then
     workspace="routing"
-  fi
-
-  if [[ "$(lookup_env ${1})" = "${HOME}/workspace/networking-oss-deployments/environments/${1}/bbl-state" ]]; then
+  elif [[ "$(lookup_env ${1})" = "${HOME}/workspace/networking-oss-deployments/environments/${1}" ]]; then
     workspace="routing"
   fi
 
@@ -469,8 +471,13 @@ cf_target() {
 
   cf api "api.${system_domain}" --skip-ssl-validation
   cf auth admin "${password}"
-  uaac target "login.${system_domain}" --skip-ssl-validation
-  uaac token client get admin -s "${uaa_password}"
+
+  if [ -n "${uaa_password}" ]; then
+    uaac target "login.${system_domain}" --skip-ssl-validation
+    uaac token client get admin -s "${uaa_password}"
+  fi
+
+  cf_seed
 }
 
 gobosh_target() {
@@ -478,6 +485,7 @@ gobosh_target() {
   if [ $# = 0 ]; then
     return
   fi
+
   export BOSH_ENV=$1
   if [ "$BOSH_ENV" = "local" ] || [ "$BOSH_ENV" = "lite" ]; then
     gobosh_target_lite
@@ -496,7 +504,7 @@ gobosh_target() {
 
   export BOSH_DIR="$(lookup_env $BOSH_ENV)"
 
-  changes="$(git -C ${BOSH_DIR} st --porcelain)"
+  changes="$(git -C ${BOSH_DIR} status --porcelain)"
   exit_code="${?}"
   if [[ "${exit_code}" -eq 0 ]] && [[ -z "${changes}" ]]; then
     git -C $BOSH_DIR pull
@@ -525,10 +533,10 @@ lookup_env() {
     return
   fi
 
-  ls ~/workspace/networking-oss-deployments/environments/$1/bbl-state > /dev/null 2>&1
+  ls ~/workspace/networking-oss-deployments/environments/$1 > /dev/null 2>&1
   exit_code=$?
   if [[ $exit_code -eq 0 ]]; then
-    echo "${HOME}/workspace/networking-oss-deployments/environments/$1/bbl-state"
+    echo "${HOME}/workspace/networking-oss-deployments/environments/$1"
     return
   fi
 
@@ -561,6 +569,7 @@ target() {
 
 gobosh_target_lite() {
   gobosh_untarget
+
   export BOSH_DIR=~/workspace/cf-networking-deployments/environments/local
 
   pushd $BOSH_DIR >/dev/null
