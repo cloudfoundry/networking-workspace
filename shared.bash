@@ -76,6 +76,9 @@ main() {
     complete -C aws_completer aws
     source <(kubectl completion bash)
     complete -W "\`find . -iname \"*akefil*\" | grep -v vendor | xargs -I {} grep -hoE '^[a-zA-Z0-9_.-]+:([^=]|$)' {} | sed 's/[^a-zA-Z0-9_.-]*$//' | sort -u\`" make
+
+    # target completion
+    source "${HOME}/workspace/networking-workspace/target-completion.bash"
   }
 
   setup_direnv() {
