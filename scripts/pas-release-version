@@ -2,8 +2,16 @@
 
 set -e
 
-if [ "$#" -ne 2 ]; then
-  echo "incorrect paramaters. usage: $0 pas-version release"
+pull_pruntime () {
+  cd ~/workspace/p-runtime
+  git fetch origin
+  git pull
+}
+
+if [ "$#" -lt 2 ]; then
+  echo "incorrect paramaters. usage: $0 <pas-version> <release>"
+  echo "You can add the --pull flag at the end of your command to have the script pull the p-runtime repo"
+  echo "You should do that the first time of the day you run the command"
   exit 1
 fi
 
@@ -15,9 +23,10 @@ release="$(basename "${release}" -release)"
 kiln_file=~/workspace/p-runtime/Kilnfile.lock
 (
   cd ~/workspace/p-runtime
-  git fetch --all 2> /dev/null 1> /dev/null
+  if [[ "$3" == '--pull' ]]; then
+    pull_pruntime
+  fi
   git co rel/${pas_version} 2> /dev/null 1> /dev/null
-  git pull -r 2> /dev/null 1> /dev/null
   release_name="$(cat "${kiln_file}" | grep "${release}" -A 2 | grep name | awk '{print $3}')"
   release_version="$(cat "${kiln_file}" | grep "${release}" -A 2 | grep version | awk '{print $2}')"
   if [[ -z $release_name ]]; then
