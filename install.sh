@@ -452,6 +452,11 @@ function install_credalert() {
   clone_if_not_exist "https://github.com/pivotal-cf/git-hooks-core.git" "${HOME}/workspace/git-hooks-core"
 
   # hook is added in gitconfig
+
+  # install binary
+  curl -O https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_darwin
+  install cred-alert-cli_darwin /usr/local/bin/cred-alert-cli
+  rm cred-alert-cli_darwin
 }
 
 main "$@"
