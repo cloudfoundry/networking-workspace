@@ -225,7 +225,7 @@ install_sshb0t() {
 
 install_ruby() {
   set -e # it's okay if this fails, we don't use ruby much
-  ruby_version=2.4.2
+  ruby_version=2.5.5
   echo "Installing ruby $ruby_version..."
   rbenv install -s $ruby_version
   rbenv global $ruby_version

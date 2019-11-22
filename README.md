@@ -70,7 +70,6 @@ To load iTerm preferences, point to this directory under `iTerm2` >
 - keep it simple
 - declarative and idempotent
 - install as much as possible via brew
-- ruby version will be `2.4.2`
 - spectacle for window management
 - [luan vim](https://github.com/luan/nvim) and [luan
   tmux](https://github.com/luan/tmuxfiles)
