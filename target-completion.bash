@@ -19,5 +19,18 @@ _target_completion()
   COMPREPLY=($(compgen -W "${envs}" -- $cur))
 }
 
+complete -o nospace -F _target_completion t target gbt gobosh_target cf-target
 
-complete -F _target_completion t target gbt gobosh_target cf-target
+_gke_target_completion() {
+  if [ "${#COMP_WORDS[@]}" != "2" ]; then
+    return
+  fi
+
+  local clusters="$(gcloud container clusters list 2>/dev/null | grep RUNNING | awk '{print $1}')"
+
+  local cur=${COMP_WORDS[COMP_CWORD]}
+
+  COMPREPLY=($(compgen -W "${clusters}" -- $cur))
+}
+
+complete -o nospace -F _gke_target_completion gke_target

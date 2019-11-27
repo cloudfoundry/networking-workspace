@@ -520,6 +520,18 @@ gobosh_target() {
   export BOSH_DEPLOYMENT="cf"
 }
 
+function gke_target() {
+  local line="$(gcloud container clusters list 2>/dev/null | grep "$1")"
+  local name="$(echo "${line}" | awk '{print $1}')"
+  local zone="$(echo "${line}" | awk '{print $2}')"
+
+  if [ -z "${name}" ]; then
+    return
+  fi
+
+  gcloud container clusters get-credentials "${name}" --zone "${zone}"
+}
+
 lookup_env() {
   local name=${1}
   ls ~/workspace/pcf-networking-deployments/environments/${1} > /dev/null 2>&1
@@ -566,8 +578,9 @@ gobosh_untarget() {
 }
 
 target() {
-  gobosh_target ${@}
-  cf_target ${@}
+  gobosh_target "${@}"
+  cf_target "${@}"
+  gke_target "${@}"
 }
 
 gobosh_target_lite() {
