@@ -414,8 +414,11 @@ all_the_repos() {
   # Eirini
   clone_if_not_exist "https://github.com/cloudfoundry-incubator/eirini" "${HOME}/workspace/eirini"
 
-  # Erini BOSH Release
+  # Eirini BOSH Release
   clone_if_not_exist "https://github.com/cloudfoundry-community/eirini-bosh-release" "${HOME}/workspace/eirini-bosh-release"
+
+  # Networking OSS Deployments
+  clone_if_not_exist "git@github.com:cloudfoundry/networking-oss-deployments.git" "${HOME}/workspace/networking-oss-deployments"
 
   # Pivotal Only ==============================================================================================
 
