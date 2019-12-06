@@ -548,6 +548,13 @@ lookup_env() {
     return
   fi
 
+  ls ~/workspace/networking-oss-deployments/environments/$1/bbl-state > /dev/null 2>&1
+  exit_code=$?
+  if [[ $exit_code -eq 0 ]]; then
+    echo "${HOME}/workspace/networking-oss-deployments/environments/$1/bbl-state"
+    return
+  fi
+
   ls ~/workspace/networking-oss-deployments/environments/$1 > /dev/null 2>&1
   exit_code=$?
   if [[ $exit_code -eq 0 ]]; then
