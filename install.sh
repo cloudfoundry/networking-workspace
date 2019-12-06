@@ -185,6 +185,7 @@ install_vimfiles() {
   echo "Adding configuration to nvim..."
   mkdir -p "${HOME}/.config/nvim/user"
   ln -sf "$(pwd)/nvim_config/after.vim" "${HOME}/.config/nvim/user/after.vim"
+  ln -sf "$(pwd)/nvim_config/plug.vim" "${HOME}/.config/nvim/user/plug.vim"
 
   echo "Copy snippets..."
   mkdir -p ${HOME}/.vim/UltiSnips
