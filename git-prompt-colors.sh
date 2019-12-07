@@ -12,7 +12,7 @@ override_git_prompt_colors() {
       kubectl config current-context
     fi)"
   Ochre="\033[38;5;95m"
-  GIT_PROMPT_START_USER="\n${Ochre}bosh: ${GoBoshTarget} | kube-cluster: ${KubeCluster} | cf: ${CfTarget} (\h) ${ResetColor}\n${Yellow}${PathShort}${ResetColor}"
+  GIT_PROMPT_START_USER="\n${Ochre}bosh: ${GoBoshTarget} | ☸️ : ${KubeCluster} | cf: ${CfTarget} (\h) ${ResetColor}\n${Yellow}${PathShort}${ResetColor}"
   GIT_PROMPT_END_USER=" ${Cyan}${GIT_PAIR}${ResetColor}\n$ "
   GIT_PROMPT_END_ROOT="\n# "
 
