@@ -58,4 +58,6 @@
 	name = CF Networking Team
 [color]
   ui = always
+[log]
+  date = local
 
