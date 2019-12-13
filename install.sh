@@ -279,6 +279,10 @@ setup_git() {
   echo "Symlink the shared.bash file into .bash_profile"
   ln -sf $(pwd)/shared.bash ${HOME}/.bash_profile
 
+  if [[ ! $(type diff-highlight 2> /dev/null) ]]; then
+      cp $(find / -name diff-highlight -type f 2> /dev/null | head -1) /usr/local/bin/
+  fi
+
   # Don't symlink this one because `git duet` will add
   # things to it and you don't want to push these changes.
   echo "Copy the gitconfig file into ~/.gitconfig..."
