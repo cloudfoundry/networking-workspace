@@ -24,7 +24,11 @@
   hooksPath = ~/workspace/git-hooks-core
   editor = nvim
   excludesfile = ~/.shared-gitignore
-  pager = /usr/local/Cellar/git/2.24.0_2/share/git-core/contrib/diff-highlight/diff-highlight | less
+  pager = diff-highlight | less
+[pager]
+  log = diff-highlight | less
+  show = diff-highlight | less
+  diff = diff-highlight | less
 [url "git@gist.github.com:"]
   pushInsteadOf = https://gist.github.com/
   pushInsteadOf = git://gist.github.com/
