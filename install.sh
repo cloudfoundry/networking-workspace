@@ -122,9 +122,15 @@ main() {
 clone_if_not_exist() {
   local remote=$1
   local dst_dir="$2"
+  local branch_name="$3"
   echo "Cloning $remote into $dst_dir"
   if [[ ! -d $dst_dir ]]; then
-    git clone "$remote" "$dst_dir"
+    if [[ -n $branch_name ]]
+      then
+	git clone --branch "$branch_name" "$remote" "$dst_dir"
+      else
+        git clone "$remote" "$dst_dir"
+    fi
   fi
 }
 
@@ -457,7 +463,7 @@ all_the_repos() {
 
 function install_credalert() {
   # https://sites.google.com/a/pivotal.io/cloud-foundry/process/security/cred-alert-cli-instructions
-  clone_if_not_exist "https://github.com/pivotal-cf/git-hooks-core.git" "${HOME}/workspace/git-hooks-core"
+  clone_if_not_exist "https://github.com/pivotal-cf/git-hooks-core.git" "${HOME}/workspace/git-hooks-core" "team/networking"
 
   # hook is added in gitconfig
 
