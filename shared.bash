@@ -927,5 +927,32 @@ function update_fly() {
   fi
 }
 
+function smith_target() {
+  if [ "$#" -lt 1 ]; then
+    echo "incorrect paramaters. usage: $0 <smith-env-name>"
+    echo ""
+    echo "this script will target cf and will provide the env vars needed to target bosh"
+    echo "you can run this command with eval to target bosh"
+    echo "for example..."
+    echo "eval '\$($0 <smith-env-name>)'"
+    echo ""
+    exit 1
+  fi
+
+  smith_env_name=$1
+
+  (
+    export env=$smith_env_name
+    bosh_vars=$(smith bosh)
+    cf_deployment=$(smith bosh deployments -- --json | jq .Tables[0].Rows[0].name)
+    eval cf_deployment=$cf_deployment
+    smith cf-login >/dev/null
+    echo "export env=$smith_env_name"
+    echo "$bosh_vars"
+    echo "export BOSH_DEPLOYMENT=$cf_deployment"
+    echo "export BOSH_ENV=$smith_env_name"
+  )
+}
+
 source $HOME/workspace/networking-workspace/custom-commands.sh
 
