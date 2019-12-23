@@ -122,7 +122,7 @@ main() {
 clone_if_not_exist() {
   local remote=$1
   local dst_dir="$2"
-  local branch_name="$3"
+  local branch_name="${3:-master}"
   echo "Cloning $remote into $dst_dir"
   if [[ ! -d $dst_dir ]]; then
     if [[ -n $branch_name ]]
