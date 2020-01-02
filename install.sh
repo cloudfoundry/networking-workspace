@@ -15,6 +15,9 @@ main() {
   cp ~/workspace/networking-workspace/workstation.install.daily.plist ~/Library/LaunchAgents/workstation.install.daily.plist
   launchctl load ~/Library/LaunchAgents/workstation.install.daily.plist
 
+  echo "Enable key repeat"
+  defaults write -g ApplePressAndHoldEnabled -bool false
+
   # adding the path so it can run in bg
   export GOPATH=~/go
   export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:$HOME/workspace/deployments-routing/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin:/usr/local/bin
