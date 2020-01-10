@@ -389,6 +389,10 @@ function toolsmiths() {
   echo "      to create a service account with a key for toolsmiths env."
 }
 
+function old() {
+  mv $1 $1.old
+}
+
 
 # NEEDS CONSOLIDATION WITH ROUTING SCRIPTS
 
