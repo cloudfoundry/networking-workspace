@@ -130,9 +130,9 @@ main() {
   fi
 
   alias brew=":"
-  alias tmux="TERM=xterm-256color tmux"
+  export TERM=xterm-256color
   export GOPATH=~/go
-  export PATH=$GOPATH/bin:$PATH:$HOME/scripts:$HOME/workspace/deployments-routing/scripts
+  export PATH=$GOPATH/bin:$PATH:$HOME/scripts:$HOME/workspace/deployments-routing/scripts:/usr/local/kubebuilder/bin
 }
 
 if [ -f $HOME/.bashrc ]; then
@@ -747,7 +747,7 @@ function good_morning(){
   # Scripts for generating Istio config for PKS Routing
   pull_if_no_dirty_changes "${HOME}/workspace/k8s-istio-resource-generator"
 
-  # PKS service mesh
+  # Ingress Router
   pull_if_no_dirty_changes "${HOME}/workspace/ingress-router"
 
   # Pivotal Networking CI -- pipeline and tasks for pivotal ci
@@ -879,7 +879,7 @@ all_the_repos() {
   # Scripts for generating Istio config for PKS Routing
   clone_if_not_exist "git@github.com:pivotal/k8s-istio-resource-generator" "${HOME}/workspace/k8s-istio-resource-generator"
 
-  # PKS Service Mesh repo
+  # Ingress Router repo
   clone_if_not_exist "git@github.com:pivotal/ingress-router" "${HOME}/workspace/ingress-router"
 
   # Pivotal Networking CI -- pipeline and tasks for pivotal ci

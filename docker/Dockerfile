@@ -7,7 +7,7 @@ ARG UID=501
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-transport-https \
     ca-certificates \
-    git curl wget gnupg \
+    curl wget gnupg \
     gnupg-agent \
     software-properties-common \
     unzip \
@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-add-repository ppa:git-core/ppa \
+ && apt-get update && apt-get install -y --no-install-recommends \
     asciidoc \
     autoconf \
     automake \
@@ -23,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     bison \
     cmake \
+    git \
     libcurl3 \
     libcurl4-openssl-dev \
     libevent-dev \
@@ -37,6 +39,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxslt-dev \
     libyaml-dev \
     openssl \
+    openvpn \
     pinentry-curses \
     pkg-config \
     unixodbc-dev \
@@ -46,13 +49,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
- && add-apt-repository ppa:neovim-ppa/stable \
  && add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
  && apt-get update && apt-get install -y --no-install-recommends \
     docker-ce docker-ce-cli containerd.io \
  && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN add-apt-repository -y ppa:neovim-ppa/stable \
+ && apt-get update && apt-get install -y --no-install-recommends \
     neovim python3 python2.7 python-dev python3-dev python-pip python3-pip \
     python-setuptools python3-setuptools \
  && apt-get -qy autoremove \
@@ -64,8 +67,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && hash -r pip3 \
  && pip install --upgrade --no-cache-dir neovim \
  && pip3 install --upgrade --no-cache-dir neovim \
- && pip install --upgrade --no-cache-dir awscli \
- && pip install --upgrade --no-cache-dir yamllint
+ && pip install --upgrade --no-cache-dir awscli yamllint lxml requests
 
 RUN git clone --depth 1 https://github.com/universal-ctags/ctags.git /tmp/ctags \
  && cd /tmp/ctags \
@@ -91,17 +93,52 @@ RUN git clone --depth 1 https://github.com/tmux/tmux.git /tmp/tmux \
 
 RUN git clone https://github.com/asdf-vm/asdf.git /home/pivotal/.asdf --branch v0.7.3
 
-RUN add-apt-repository ppa:aacebedo/fasd \
-&&  apt-get update && apt-get install -y --no-install-recommends \
+RUN add-apt-repository -y ppa:aacebedo/fasd \
+ && apt-get update && apt-get install -y --no-install-recommends \
     sudo tree jq fasd silversearcher-ag \
  && apt-get -qy autoremove \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+ && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
+ && apt-get update && apt-get install -y google-cloud-sdk \
+ && apt-get -qy autoremove \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN add-apt-repository -y ppa:dwmw2/openconnect \
+ && apt-get update && apt-get install -y openconnect \
+ && apt-get -qy autoremove \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY pks-linux-amd64-1.5.0-build.291 /usr/local/bin/pks
+
+RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.1.0/bosh-cli-6.1.0-linux-amd64 \
+ && wget -O /usr/local/bin/bbl https://github.com/cloudfoundry/bosh-bootloader/releases/download/v8.2.14/bbl-v8.2.14_linux_x86-64 \
+ && wget -O /usr/local/bin/om https://github.com/pivotal-cf/om/releases/download/4.1.0/om-linux-4.1.0 \
+ && wget -O /usr/local/bin/pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v0.0.68/pivnet-linux-amd64-0.0.68 \
+ && wget -O /tmp/credhub.tgz https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.6.0/credhub-linux-2.6.0.tgz \
+ && wget -O /tmp/codeserver.tgz https://github.com/cdr/code-server/releases/download/1.1156-vsc1.33.1/code-server1.1156-vsc1.33.1-linux-x64.tar.gz \
+ && wget -O /tmp/kubebuilder.tgz https://go.kubebuilder.io/dl/2.1.0/linux/amd64 \
+ && tar -xzf /tmp/credhub.tgz -C /tmp && mv /tmp/credhub /usr/local/bin/credhub \
+ && tar -xzf /tmp/codeserver.tgz -C /tmp && mv /tmp/code*/code-server /usr/local/bin/code-server \
+ && tar -xzf /tmp/kubebuilder.tgz -C /tmp && mv /tmp/kubebuilder_2.1.0_linux_amd64 /usr/local/kubebuilder \
+ && chmod +x /usr/local/bin/pks /usr/local/bin/bosh /usr/local/bin/bbl /usr/local/bin/om /usr/local/bin/credhub /usr/local/bin/code-server \
+ && rm -rf /tmp/*
+
+# Enable the SSH server on the container
+RUN rm -f /etc/service/sshd/down
+RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+
 RUN groupadd -g 2000 pivotal \
  && useradd -ms /bin/bash -u $UID -g pivotal pivotal \
- && echo 'pivotal:pivotal' | chpasswd && adduser pivotal sudo \
- && chown -R pivotal:pivotal /home/pivotal
+ && echo 'pivotal:pivotal' | chpasswd \
+ && usermod -aG sudo pivotal \
+ && usermod -aG docker pivotal \
+ && chown -R pivotal:pivotal /home/pivotal \
+ && chmod 1777 /tmp
 
 USER pivotal
 WORKDIR /home/pivotal
@@ -112,6 +149,7 @@ COPY tool-versions $HOME/.tool-versions
 RUN bash -c ". $HOME/.asdf/asdf.sh \
  && asdf plugin-add adr-tools \
  && asdf plugin-add cf \
+ && asdf plugin-add concourse \
  && asdf plugin-add dep \
  && asdf plugin-add eksctl \
  && asdf plugin-add golang \
@@ -132,21 +170,23 @@ RUN bash -c ". $HOME/.asdf/asdf.sh \
 
 ENV GOPATH=$HOME/go
 
-RUN mkdir -pv $GOPATH/src \
+RUN mkdir -pv $HOME/go \
  && mkdir -pv $HOME/workspace \
  && mkdir -pv $HOME/.cf
 
 RUN bash -c ". $HOME/.asdf/asdf.sh \
- && go get -u github.com/direnv/direnv \
- && go get -u github.com/git-duet/git-duet/... \
- && go get -u github.com/cf-container-networking/bosh-target \
- && go get -u github.com/dbellotti/cf-target \
- && go get -u github.com/fatih/hclfmt \
- && go get -u github.com/onsi/ginkgo/ginkgo \
- && go get -u github.com/onsi/gomega \
- && go get -u github.com/maxbrunsfeld/counterfeiter \
- && go get -u github.com/kkallday/deployment-extractor \
- && go get -u github.com/sourcegraph/go-langserver"
+ && export GO111MODULE=on \
+ && go get github.com/direnv/direnv \
+ && go get github.com/git-duet/git-duet/... \
+ && go get github.com/cf-container-networking/bosh-target \
+ && go get github.com/dbellotti/cf-target \
+ && go get github.com/fatih/hclfmt \
+ && go get github.com/onsi/ginkgo/ginkgo \
+ && go get github.com/onsi/gomega \
+ && go get github.com/maxbrunsfeld/counterfeiter/v6 \
+ && go get github.com/kkallday/deployment-extractor \
+ && go get github.com/sourcegraph/go-langserver \
+ && go get sigs.k8s.io/kind@v0.5.1"
 
 RUN mkdir -pv $HOME/setup \
  && cd $HOME/setup \
@@ -160,6 +200,10 @@ RUN mkdir -pv $HOME/setup \
  && ln -sf $(pwd)/global-gitignore $HOME/.global-gitignore \
  && ln -sf $(pwd)/git-prompt-colors.sh $HOME/.git-prompt-colors.sh \
  && ln -sfn $(pwd)/scripts $HOME/scripts
+
+RUN cd $HOME/setup \
+ && git clone --single-branch --branch feature/push \
+    https://github.com/sirmax/pan-globalprotect-okta/
 
 ENV NETWORKING_WORKSPACE /home/pivotal/setup/networking-workspace
 
@@ -184,3 +228,4 @@ LABEL com.ensody.ssh-agent-inject=
 
 COPY shared.bash $NETWORKING_WORKSPACE/shared.bash
 COPY cf.config.json $HOME/.cf/config.json
+COPY gp-okta.conf $HOME/setup/pan-globalprotect-okta/gp-okta.conf

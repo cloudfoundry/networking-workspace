@@ -76,6 +76,9 @@ main() {
     complete -C aws_completer aws
     source <(kubectl completion bash)
     complete -W "\`find . -iname \"*akefil*\" | grep -v vendor | xargs -I {} grep -hoE '^[a-zA-Z0-9_.-]+:([^=]|$)' {} | sed 's/[^a-zA-Z0-9_.-]*$//' | sort -u\`" make
+
+    # target completion
+    source "${HOME}/workspace/networking-workspace/target-completion.bash"
   }
 
   setup_direnv() {
@@ -393,7 +396,42 @@ function old() {
   mv $1 $1.old
 }
 
+function export-smith-token() {
+  local email=$1
 
+  if [[ -z ${email} ]]; then
+    echo "Usage: $0 [LastPass email or git author initials]"
+    return
+  fi
+
+  if ! [[ $(lpass status) =~ $email ]]; then
+    lpass login "$email"
+  fi
+
+  token_cmd=$(lpass show --notes 'Shared-CF-Networking (Pivotal)/concourse_toolsmiths_api_key')
+  eval "${token_cmd}"
+}
+
+function target-smith-deployment() {
+  local smith_env=${1:-$env}
+
+  if [[ -z ${smith_env} ]]; then
+    echo "Usage: $0 [claimed from smith env name]"
+    echo 'If env is not provided the `env` environment variable will be used, if it is empty, the execution will be aborted'
+    return 1
+  fi
+>>>>>>> 0c6e6976309e88ca962c75b704486b757a87424c
+
+  echo "Retreving the deployment name..."
+  d=$(smith -e ${smith_env} bosh -- deployments --column "Name" --json | jq ".Tables[0].Rows[0].name" -r)
+  if [[ -z ${d} ]]; then
+    echo "Looks like your API key is not exported, try to run export-smith-token first"
+    return 1
+  fi
+  echo "Deployment is ${d}"
+  echo "Making smith-bosh alias"
+  alias smith-bosh="smith -e ${smith_env} bosh -- -d ${d}"
+}
 # NEEDS CONSOLIDATION WITH ROUTING SCRIPTS
 
 cf_target() {
@@ -414,16 +452,18 @@ cf_target() {
   if [ "$env" = "local" ] || [ "$env" = "lite" ]; then
     password=$(grep cf_admin_password "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
     uaa_password=$(grep uaa_admin_client_secret "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
+  elif [ -f "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json" ]; then
+    password=$(jq -r '.admin_password' < "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json")
   else
     password=$(credhub get -n "/bosh-${env}/cf/cf_admin_password" | bosh int --path /value -)
     uaa_password=$(credhub get -n "/bosh-${env}/cf/uaa_admin_client_secret" | bosh int --path /value -)
   fi
 
+  [ -f "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json" ] && workspace="cf-k8s" || workspace="routing"
+
   if [[ "$(lookup_env ${1})" = "${HOME}/workspace/deployments-routing/${1}/bbl-state" ]]; then
     workspace="routing"
-  fi
-
-  if [[ "$(lookup_env ${1})" = "${HOME}/workspace/networking-oss-deployments/environments/${1}/bbl-state" ]]; then
+  elif [[ "$(lookup_env ${1})" = "${HOME}/workspace/networking-oss-deployments/environments/${1}" ]]; then
     workspace="routing"
   fi
 
@@ -437,8 +477,13 @@ cf_target() {
 
   cf api "api.${system_domain}" --skip-ssl-validation
   cf auth admin "${password}"
-  uaac target "login.${system_domain}" --skip-ssl-validation
-  uaac token client get admin -s "${uaa_password}"
+
+  if [ -n "${uaa_password}" ]; then
+    uaac target "login.${system_domain}" --skip-ssl-validation
+    uaac token client get admin -s "${uaa_password}"
+  fi
+
+  cf_seed
 }
 
 gobosh_target() {
@@ -446,6 +491,7 @@ gobosh_target() {
   if [ $# = 0 ]; then
     return
   fi
+
   export BOSH_ENV=$1
   if [ "$BOSH_ENV" = "local" ] || [ "$BOSH_ENV" = "lite" ]; then
     gobosh_target_lite
@@ -464,7 +510,7 @@ gobosh_target() {
 
   export BOSH_DIR="$(lookup_env $BOSH_ENV)"
 
-  changes="$(git -C ${BOSH_DIR} st --porcelain)"
+  changes="$(git -C ${BOSH_DIR} status --porcelain)"
   exit_code="${?}"
   if [[ "${exit_code}" -eq 0 ]] && [[ -z "${changes}" ]]; then
     git -C $BOSH_DIR pull
@@ -475,6 +521,18 @@ gobosh_target() {
   popd 1>/dev/null
 
   export BOSH_DEPLOYMENT="cf"
+}
+
+function gke_target() {
+  local line="$(gcloud container clusters list 2>/dev/null | grep "$1")"
+  local name="$(echo "${line}" | awk '{print $1}')"
+  local zone="$(echo "${line}" | awk '{print $2}')"
+
+  if [ -z "${name}" ]; then
+    return
+  fi
+
+  gcloud container clusters get-credentials "${name}" --zone "${zone}"
 }
 
 lookup_env() {
@@ -497,6 +555,13 @@ lookup_env() {
   exit_code=$?
   if [[ $exit_code -eq 0 ]]; then
     echo "${HOME}/workspace/networking-oss-deployments/environments/$1/bbl-state"
+    return
+  fi
+
+  ls ~/workspace/networking-oss-deployments/environments/$1 > /dev/null 2>&1
+  exit_code=$?
+  if [[ $exit_code -eq 0 ]]; then
+    echo "${HOME}/workspace/networking-oss-deployments/environments/$1"
     return
   fi
 
@@ -523,12 +588,14 @@ gobosh_untarget() {
 }
 
 target() {
-  gobosh_target ${@}
-  cf_target ${@}
+  gobosh_target "${@}"
+  cf_target "${@}"
+  gke_target "${@}"
 }
 
 gobosh_target_lite() {
   gobosh_untarget
+
   export BOSH_DIR=~/workspace/cf-networking-deployments/environments/local
 
   pushd $BOSH_DIR >/dev/null
@@ -861,6 +928,33 @@ function update_fly() {
     chmod +x fly
     sudo mv fly $(which fly)
   fi
+}
+
+function smith_target() {
+  if [ "$#" -lt 1 ]; then
+    echo "incorrect paramaters. usage: $0 <smith-env-name>"
+    echo ""
+    echo "this script will target cf and will provide the env vars needed to target bosh"
+    echo "you can run this command with eval to target bosh"
+    echo "for example..."
+    echo "eval '\$($0 <smith-env-name>)'"
+    echo ""
+    exit 1
+  fi
+
+  smith_env_name=$1
+
+  (
+    export env=$smith_env_name
+    bosh_vars=$(smith bosh)
+    cf_deployment=$(smith bosh deployments -- --json | jq .Tables[0].Rows[0].name)
+    eval cf_deployment=$cf_deployment
+    smith cf-login >/dev/null
+    echo "export env=$smith_env_name"
+    echo "$bosh_vars"
+    echo "export BOSH_DEPLOYMENT=$cf_deployment"
+    echo "export BOSH_ENV=$smith_env_name"
+  )
 }
 
 source $HOME/workspace/networking-workspace/custom-commands.sh

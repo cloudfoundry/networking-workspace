@@ -15,6 +15,9 @@ main() {
   cp ~/workspace/networking-workspace/workstation.install.daily.plist ~/Library/LaunchAgents/workstation.install.daily.plist
   launchctl load ~/Library/LaunchAgents/workstation.install.daily.plist
 
+  echo "Enable key repeat"
+  defaults write -g ApplePressAndHoldEnabled -bool false
+
   # adding the path so it can run in bg
   export GOPATH=~/go
   export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:$HOME/workspace/deployments-routing/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin:/usr/local/bin
@@ -109,6 +112,9 @@ main() {
   echo "Set screensaver timeout to 10 minutes..."
   defaults -currentHost write com.apple.screensaver idleTime 600
 
+  echo "Configuring IDE preferences..."
+  setup_pivotal_ide_prefs
+
   echo "updating all git repos to use 'git co-author'"
   export GIT_DUET_CO_AUTHORED_BY=0
   find ~/workspace/ -type d -name '.git' -exec sh -c 'cd {} && cd .. && git duet > /dev/null && git init' \;
@@ -119,9 +125,15 @@ main() {
 clone_if_not_exist() {
   local remote=$1
   local dst_dir="$2"
+  local branch_name="${3:-master}"
   echo "Cloning $remote into $dst_dir"
   if [[ ! -d $dst_dir ]]; then
-    git clone "$remote" "$dst_dir"
+    if [[ -n $branch_name ]]
+      then
+	git clone --branch "$branch_name" "$remote" "$dst_dir"
+      else
+        git clone "$remote" "$dst_dir"
+    fi
   fi
 }
 
@@ -182,6 +194,7 @@ install_vimfiles() {
   echo "Adding configuration to nvim..."
   mkdir -p "${HOME}/.config/nvim/user"
   ln -sf "$(pwd)/nvim_config/after.vim" "${HOME}/.config/nvim/user/after.vim"
+  ln -sf "$(pwd)/nvim_config/plug.vim" "${HOME}/.config/nvim/user/plug.vim"
 
   echo "Copy snippets..."
   mkdir -p ${HOME}/.vim/UltiSnips
@@ -222,7 +235,7 @@ install_sshb0t() {
 
 install_ruby() {
   set -e # it's okay if this fails, we don't use ruby much
-  ruby_version=2.4.2
+  ruby_version=2.5.5
   echo "Installing ruby $ruby_version..."
   rbenv install -s $ruby_version
   rbenv global $ruby_version
@@ -275,10 +288,17 @@ setup_git() {
   echo "Symlink the shared.bash file into .bash_profile"
   ln -sf $(pwd)/shared.bash ${HOME}/.bash_profile
 
+  if [[ ! $(type diff-highlight 2> /dev/null) ]]; then
+      cp $(find / -name diff-highlight -type f 2> /dev/null | head -1) /usr/local/bin/
+  fi
+
   # Don't symlink this one because `git duet` will add
   # things to it and you don't want to push these changes.
   echo "Copy the gitconfig file into ~/.gitconfig..."
   cp -rf $(pwd)/gitconfig ${HOME}/.gitconfig
+
+  echo "Installing cred-alert-cli"
+  install_credalert
 
   echo "Symlink the inputrc file into ~/.inputrc..."
   ln -sf $(pwd)/inputrc ${HOME}/.inputrc
@@ -288,6 +308,13 @@ setup_git() {
 
   echo "Symlink global .git-prompt-colors.sh"
   ln -sf $(pwd)/git-prompt-colors.sh ${HOME}/.git-prompt-colors.sh
+}
+
+setup_pivotal_ide_prefs() {
+  pushd ~/workspace/pivotal_ide_prefs > /dev/null
+	  ./cli/bin/ide_prefs install --ide=rubymine
+	  ./cli/bin/ide_prefs install --ide=goland
+  popd > /dev/null
 }
 
 all_the_repos() {
@@ -395,6 +422,18 @@ all_the_repos() {
   # Istio Sample Apps
   clone_if_not_exist "git@github.com:GoogleCloudPlatform/istio-samples.git" "${HOME}/workspace/istio-samples"
 
+  # CF K8S Networking
+  clone_if_not_exist "https://github.com/cloudfoundry/cf-k8s-networking" "${HOME}/workspace/cf-k8s-networking"
+
+  # Eirini
+  clone_if_not_exist "https://github.com/cloudfoundry-incubator/eirini" "${HOME}/workspace/eirini"
+
+  # Eirini BOSH Release
+  clone_if_not_exist "https://github.com/cloudfoundry-community/eirini-bosh-release" "${HOME}/workspace/eirini-bosh-release"
+
+  # Networking OSS Deployments
+  clone_if_not_exist "git@github.com:cloudfoundry/networking-oss-deployments.git" "${HOME}/workspace/networking-oss-deployments"
+
   # Pivotal Only ==============================================================================================
 
   # Routing Support Notes: List of support tickets, past and present, and a handy template to start your own.
@@ -420,6 +459,21 @@ all_the_repos() {
 
   # Istio Envoy OSL scripts
   clone_if_not_exist "git@github.com:pivotal/istio-envoy-osl.git" "${HOME}/workspace/istio-envoy-osl"
+
+  # Pivotal Intellij IDE Preferences
+  clone_if_not_exist "git@github.com:pivotal-legacy/pivotal_ide_prefs.git" "${HOME}/workspace/pivotal_ide_prefs"
+}
+
+function install_credalert() {
+  # https://sites.google.com/a/pivotal.io/cloud-foundry/process/security/cred-alert-cli-instructions
+  clone_if_not_exist "https://github.com/pivotal-cf/git-hooks-core.git" "${HOME}/workspace/git-hooks-core" "team/networking"
+
+  # hook is added in gitconfig
+
+  # install binary
+  curl -O https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_darwin
+  install cred-alert-cli_darwin /usr/local/bin/cred-alert-cli
+  rm cred-alert-cli_darwin
 }
 
 main "$@"

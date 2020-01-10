@@ -11,11 +11,20 @@ brew services start mysql
 echo "Configuring Postgres"
 brew link postgresql --force
 set +e
+
+RETRIES=5
+
+until psql -U postgres c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
+  echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
+  sleep 1
+done
+
 psql -U postgres -c "\l"
+
 postgres_role_status=$?
 set -e
 if [ ${postgres_role_status} -ne 0 ]; then
-  psql -d postgres -c "CREATE ROLE postgres WITH SUPERUSER LOGIN PASSWORD 'password';" 
+  until psql -d postgres -c "CREATE ROLE postgres WITH SUPERUSER LOGIN PASSWORD 'password';"; do sleep 10; done
 fi
 
 echo "Configuring Mysql"

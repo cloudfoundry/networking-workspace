@@ -21,8 +21,14 @@
   unstage = "reset HEAD"
   pra = pull --rebase --autostash
 [core]
+  hooksPath = ~/workspace/git-hooks-core
   editor = nvim
   excludesfile = ~/.shared-gitignore
+  pager = diff-highlight | less
+[pager]
+  log = diff-highlight | less
+  show = diff-highlight | less
+  diff = diff-highlight | less
 [url "git@gist.github.com:"]
   pushInsteadOf = https://gist.github.com/
   pushInsteadOf = git://gist.github.com/
@@ -50,3 +56,8 @@
 [user]
 	email = cf-networking@pivotal.io
 	name = CF Networking Team
+[color]
+  ui = always
+[log]
+  date = local
+
