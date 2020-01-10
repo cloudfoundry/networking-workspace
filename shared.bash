@@ -420,7 +420,6 @@ function target-smith-deployment() {
     echo 'If env is not provided the `env` environment variable will be used, if it is empty, the execution will be aborted'
     return 1
   fi
->>>>>>> 0c6e6976309e88ca962c75b704486b757a87424c
 
   echo "Retreving the deployment name..."
   d=$(smith -e ${smith_env} bosh -- deployments --column "Name" --json | jq ".Tables[0].Rows[0].name" -r)
