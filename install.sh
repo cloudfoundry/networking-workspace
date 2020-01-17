@@ -84,6 +84,19 @@ main() {
   fi
   set -e
 
+  set +e
+  version=2.2.0
+  echo "Installing kubebuider ${version}..."
+  if [[ "$(kubebuilder version)" != *"KubeBuilderVersion:\"${version}\""*  ]]; then
+    sudo rm -rf /usr/local/kubebuilder
+    os=$(go env GOOS)
+    arch=$(go env GOARCH)
+    curl -L https://go.kubebuilder.io/dl/${version}/${os}/${arch} | tar -xz -C /tmp/
+    sudo mv /tmp/kubebuilder_${version}_${os}_${arch} /usr/local/kubebuilder
+  fi
+  set -e
+
+
   if [ ! -f ~/.flyrc ]; then
     cp flyrc ~/.flyrc
   else
