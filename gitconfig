@@ -4,6 +4,7 @@
   ci = commit
   co = checkout
   cos = "checkout --recurse-submodules"
+  cp = cherry-pick
   di = diff
   drb = rebase -i --exec 'git duet-commit --amend --reset-author'
   ds = "diff --staged"
