@@ -71,6 +71,7 @@ brew 'libuv'
 brew 'mysql', restart_service: true
 brew 'neovim'
 brew 'node'
+brew 'octant'
 brew 'om'
 brew 'oniguruma'
 brew 'openssl'
