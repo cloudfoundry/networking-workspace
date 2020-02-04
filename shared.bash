@@ -35,6 +35,7 @@ main() {
 
     #kubectl aliases
     alias k="kubectl"
+    alias kobectl="kubectl"
     complete -F __start_kubectl k #enable bash auto-completion for k
   }
 
