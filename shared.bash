@@ -52,7 +52,7 @@ main() {
     export GIT_DUET_CO_AUTHORED_BY=1
 
     # setup path
-    export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:$HOME/workspace/deployments-routing/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin:/usr/local/kubebuilder/bin
+    export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin:/usr/local/kubebuilder/bin
     export EDITOR=nvim
   }
 
@@ -109,7 +109,7 @@ main() {
 
   setup_bosh_env_scripts() {
     local bosh_scripts
-    bosh_scripts="${HOME}/workspace/deployments-routing/scripts/script_helpers.sh"
+    bosh_scripts="${HOME}/workspace/networking-oss-tools/scripts/script_helpers.sh"
     [[ -s "${bosh_scripts}" ]] && source "${bosh_scripts}"
   }
 
