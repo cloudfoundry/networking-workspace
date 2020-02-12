@@ -36,6 +36,12 @@ main() {
     #kubectl aliases
     alias k="kubectl"
     alias kobectl="kubectl"
+    # Get current context
+    alias krc='kubectl config current-context'
+    # List all contexts
+    alias klc='kubectl config get-contexts -o name | sed "s/^/  /;\|^  $(krc)$|s/ /*/"'
+    # Change current context
+    alias kcc='kubectl config use-context "$(klc | fzf -e | sed "s/^..//")"'
     complete -F __start_kubectl k #enable bash auto-completion for k
   }
 
