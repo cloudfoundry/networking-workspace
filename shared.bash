@@ -328,7 +328,7 @@ function gh_remote_path() { # Parses the 'remote path' of the repo: username/rep
   echo ${GH_PATH#com/}
 }
 
-function gh() { # Opens current branch on Github, works for all repos
+function opengh() { # Opens current branch on Github, works for all repos
   REMOTE=${1:-origin}
 
   echo 'Opening branch on Github...'
