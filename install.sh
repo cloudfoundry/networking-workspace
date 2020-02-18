@@ -447,9 +447,6 @@ all_the_repos() {
   # Networking OSS Deployments
   clone_if_not_exist "git@github.com:cloudfoundry/networking-oss-deployments.git" "${HOME}/workspace/networking-oss-deployments"
 
-  # Networking OSS Tools
-  clone_if_not_exist "git@github.com:cloudfoundry/networking-oss-tools.git" "${HOME}/workspace/networking-oss-tools"
-
   # Pivotal Only ==============================================================================================
 
   # Routing Support Notes: List of support tickets, past and present, and a handy template to start your own.

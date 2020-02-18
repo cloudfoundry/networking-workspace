@@ -115,7 +115,7 @@ main() {
 
   setup_bosh_env_scripts() {
     local bosh_scripts
-    bosh_scripts="${HOME}/workspace/networking-oss-tools/scripts/script_helpers.sh"
+    bosh_scripts="${HOME}/workspace/networking-oss-deployments/scripts/script_helpers.sh"
     [[ -s "${bosh_scripts}" ]] && source "${bosh_scripts}"
   }
 
