@@ -403,22 +403,6 @@ function old() {
   mv $1 $1.old
 }
 
-function export-smith-token() {
-  local email=$1
-
-  if [[ -z ${email} ]]; then
-    echo "Usage: $0 [LastPass email or git author initials]"
-    return
-  fi
-
-  if ! [[ $(lpass status) =~ $email ]]; then
-    lpass login "$email"
-  fi
-
-  token_cmd=$(lpass show --notes 'Shared-CF-Networking (Pivotal)/concourse_toolsmiths_api_key')
-  eval "${token_cmd}"
-}
-
 function target-smith-deployment() {
   local smith_env=${1:-$env}
 
