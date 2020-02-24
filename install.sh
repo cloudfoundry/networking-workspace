@@ -132,6 +132,8 @@ main() {
   export GIT_DUET_CO_AUTHORED_BY=0
   find ~/workspace/ -type d -name '.git' -exec sh -c 'cd {} && cd .. && git duet > /dev/null && git init' \;
 
+  cp smith-token-hook.sh ~/.smith-token-hook.sh
+
   echo "Workstation setup complete — open a new window to apply all settings! 🌈"
 }
 
