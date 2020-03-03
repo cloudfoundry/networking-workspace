@@ -59,6 +59,7 @@ main() {
 
     # setup path
     export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin:/usr/local/kubebuilder/bin
+    export PATH="$(brew --prefix findutils)/libexec/gnubin:$PATH";
     export EDITOR=nvim
   }
 
