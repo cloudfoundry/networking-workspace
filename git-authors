@@ -22,4 +22,5 @@ authors:
 email:
   domain: pivotal.io
 email_addresses:
+  ao: aobley@vmware.com
   ca: angc@vmware.com
