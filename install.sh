@@ -96,6 +96,15 @@ main() {
   fi
   set -e
 
+  set +e
+  istioctl_version=1.4.5
+  if [[ "$(uname)" = "Darwin" ]]; then
+    curl -L "https://github.com/istio/istio/releases/download/${istioctl_version}/istioctl-${istioctl_version}-osx.tar.gz" | tar -xz -C /tmp/
+  else
+    curl -L "https://github.com/istio/istio/releases/download/${istioctl_version}/istioctl-${istioctl_version}-linux.tar.gz" | tar -xz -C /tmp/
+  fi
+  mv /tmp/istioctl /usr/local/bin/istioctl
+  set -e
 
   if [ ! -f ~/.flyrc ]; then
     cp flyrc ~/.flyrc
