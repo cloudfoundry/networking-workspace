@@ -91,7 +91,7 @@ RUN git clone --depth 1 https://github.com/tmux/tmux.git /tmp/tmux \
  && make install \
  && rm -rf /tmp/tmux
 
-RUN git clone https://github.com/asdf-vm/asdf.git /home/pivotal/.asdf --branch v0.7.3
+RUN git clone https://github.com/asdf-vm/asdf.git /home/pivotal/.asdf --branch v0.7.8
 
 RUN add-apt-repository -y ppa:aacebedo/fasd \
  && apt-get update && apt-get install -y --no-install-recommends \
@@ -113,19 +113,22 @@ RUN add-apt-repository -y ppa:dwmw2/openconnect \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-COPY pks-linux-amd64-1.5.0-build.291 /usr/local/bin/pks
+COPY pks-linux-amd64-1.7.0-build.417 /usr/local/bin/pks
+COPY smith_linux_amd64.tar.gz /tmp/smith.tar.gz
 
-RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.1.0/bosh-cli-6.1.0-linux-amd64 \
- && wget -O /usr/local/bin/bbl https://github.com/cloudfoundry/bosh-bootloader/releases/download/v8.2.14/bbl-v8.2.14_linux_x86-64 \
- && wget -O /usr/local/bin/om https://github.com/pivotal-cf/om/releases/download/4.1.0/om-linux-4.1.0 \
- && wget -O /usr/local/bin/pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v0.0.68/pivnet-linux-amd64-0.0.68 \
- && wget -O /tmp/credhub.tgz https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.6.0/credhub-linux-2.6.0.tgz \
- && wget -O /tmp/codeserver.tgz https://github.com/cdr/code-server/releases/download/1.1156-vsc1.33.1/code-server1.1156-vsc1.33.1-linux-x64.tar.gz \
- && wget -O /tmp/kubebuilder.tgz https://go.kubebuilder.io/dl/2.1.0/linux/amd64 \
+RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.2.1/bosh-cli-6.2.1-linux-amd64 \
+ && wget -O /usr/local/bin/bbl https://github.com/cloudfoundry/bosh-bootloader/releases/download/v8.4.0/bbl-v8.4.0_linux_x86-64 \
+ && wget -O /usr/local/bin/om https://github.com/pivotal-cf/om/releases/download/4.6.0/om-linux-4.6.0 \
+ && wget -O /usr/local/bin/pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v1.0.1/pivnet-linux-amd64-1.0.1 \
+ && wget -O /tmp/credhub.tgz https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.7.0/credhub-linux-2.7.0.tgz \
+ && wget -O /tmp/codeserver.tar.gz https://github.com/cdr/code-server/releases/download/3.0.1/code-server-3.0.1-linux-x86_64.tar.gz \
+ && wget -O /tmp/kubebuilder.tar.gz https://github.com/kubernetes-sigs/kubebuilder/releases/download/v2.3.1/kubebuilder_2.3.1_linux_amd64.tar.gz \
  && tar -xzf /tmp/credhub.tgz -C /tmp && mv /tmp/credhub /usr/local/bin/credhub \
- && tar -xzf /tmp/codeserver.tgz -C /tmp && mv /tmp/code*/code-server /usr/local/bin/code-server \
- && tar -xzf /tmp/kubebuilder.tgz -C /tmp && mv /tmp/kubebuilder_2.1.0_linux_amd64 /usr/local/kubebuilder \
- && chmod +x /usr/local/bin/pks /usr/local/bin/bosh /usr/local/bin/bbl /usr/local/bin/om /usr/local/bin/credhub /usr/local/bin/code-server \
+ && tar -xzf /tmp/codeserver.tar.gz -C /tmp && mv /tmp/code*/code-server /usr/local/bin/code-server \
+ && tar -xzf /tmp/kubebuilder.tar.gz -C /tmp && mv /tmp/kubebuilder*/bin/kubebuilder /usr/local/bin/kubebuilder \
+ && tar -xzf /tmp/smith.tar.gz -C /tmp && mv /tmp/smith /usr/local/bin/smith \
+ && chmod +x /usr/local/bin/pks /usr/local/bin/bosh /usr/local/bin/bbl /usr/local/bin/om /usr/local/bin/pivnet \
+ && chmod +x /usr/local/bin/credhub /usr/local/bin/code-server /usr/local/bin/kubebuilder /usr/local/bin/smith \
  && rm -rf /tmp/*
 
 # Enable the SSH server on the container
@@ -186,7 +189,7 @@ RUN bash -c ". $HOME/.asdf/asdf.sh \
  && go get github.com/maxbrunsfeld/counterfeiter/v6 \
  && go get github.com/kkallday/deployment-extractor \
  && go get github.com/sourcegraph/go-langserver \
- && go get sigs.k8s.io/kind@v0.5.1"
+ && go get sigs.k8s.io/kind@v0.7.0"
 
 RUN mkdir -pv $HOME/setup \
  && cd $HOME/setup \
@@ -219,7 +222,8 @@ RUN git clone https://github.com/luan/tmuxfiles $HOME/setup/tmuxfiles \
 
 RUN mkdir -pv $HOME/.ssh \
  && chmod 0700 $HOME/.ssh \
- && cp $NETWORKING_WORKSPACE/ssh_config $HOME/.ssh/config
+ && cp $NETWORKING_WORKSPACE/ssh_config $HOME/.ssh/config \
+ && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
 RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
 
@@ -228,4 +232,4 @@ LABEL com.ensody.ssh-agent-inject=
 
 COPY shared.bash $NETWORKING_WORKSPACE/shared.bash
 COPY cf.config.json $HOME/.cf/config.json
-COPY gp-okta.conf $HOME/setup/pan-globalprotect-okta/gp-okta.conf
+COPY pivotal.conf $HOME/setup/pan-globalprotect-okta/pivotal.conf
