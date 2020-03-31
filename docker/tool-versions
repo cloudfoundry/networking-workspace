@@ -5,7 +5,7 @@ dep 0.5.4
 eksctl 0.16.0
 golang 1.14.1
 helm 3.1.2
-istioctl 1.5.1
+istioctl 1.4.5
 kubectl 1.18.0
 nodejs 13.12.0
 packer 1.5.5

@@ -54,9 +54,8 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     docker-ce docker-ce-cli containerd.io \
  && rm -rf /var/lib/apt/lists/*
 
-RUN add-apt-repository -y ppa:neovim-ppa/stable \
- && apt-get update && apt-get install -y --no-install-recommends \
-    neovim python3 python2.7 python-dev python3-dev python-pip python3-pip \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 python2.7 python-dev python3-dev python-pip python3-pip \
     python-setuptools python3-setuptools \
  && apt-get -qy autoremove \
  && apt-get clean \
@@ -129,6 +128,16 @@ RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/release
  && tar -xzf /tmp/smith.tar.gz -C /tmp && mv /tmp/smith /usr/local/bin/smith \
  && chmod +x /usr/local/bin/pks /usr/local/bin/bosh /usr/local/bin/bbl /usr/local/bin/om /usr/local/bin/pivnet \
  && chmod +x /usr/local/bin/credhub /usr/local/bin/code-server /usr/local/bin/kubebuilder /usr/local/bin/smith \
+ && rm -rf /tmp/*
+
+# Additional nvim dependencies
+RUN wget -O /tmp/ripgrep.deb https://github.com/BurntSushi/ripgrep/releases/download/12.0.1/ripgrep_12.0.1_amd64.deb \
+ && wget -O /tmp/fd-musl.deb https://github.com/sharkdp/fd/releases/download/v7.5.0/fd-musl_7.5.0_amd64.deb \
+ && apt install /tmp/ripgrep.deb /tmp/fd-musl.deb \
+ && apt-get -qy autoremove \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s /home/pivotal/vimfs-root/usr/bin/nvim /usr/local/bin/nvim \
  && rm -rf /tmp/*
 
 # Enable the SSH server on the container
@@ -209,6 +218,11 @@ RUN cd $HOME/setup \
     https://github.com/sirmax/pan-globalprotect-okta/
 
 ENV NETWORKING_WORKSPACE /home/pivotal/setup/networking-workspace
+
+RUN wget -O /tmp/nvim.appimage https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage \
+ && chmod u+x /tmp/nvim.appimage && /tmp/nvim.appimage --appimage-extract \
+ && mv $HOME/squashfs-root $HOME/vimfs-root \
+ && rm -rf /tmp/*
 
 RUN mkdir -pv $HOME/.config \
  && git clone https://github.com/luan/nvim $HOME/.config/nvim \

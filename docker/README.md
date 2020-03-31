@@ -52,8 +52,13 @@ host network.
 ### Pivotal VPN
   Ideally run this foregrounded inside a tmux window or background it somehow:
   - `cd` to `~/setup/pan-globalprotect-okta`
-  - run `python3 gp-okta.py gp-okta.conf`
+  - run `python3 gp-okta.py pivotal.conf`
   - log in to Okta from the CLI (only SMS, Google Auth, or Push to Login TFA supported)
+
+### VMware VPN
+  Run `sudo openconnect --protocol gp https://gpu.vmware.com` and follow the
+  instructions. The login process is kind of finicky so you might have to try
+  again or use Biometric authentication.
 
 ### VS Code
   Run `code-server --port 4567` and use VS Code at `localhost:4567`
