@@ -452,9 +452,7 @@ cf_target() {
 
   [ -f "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json" ] && workspace="cf-k8s" || workspace="routing"
 
-  if [[ "$(lookup_env ${1})" = "${HOME}/workspace/deployments-routing/${1}/bbl-state" ]]; then
-    workspace="routing"
-  elif [[ "$(lookup_env ${1})" = "${HOME}/workspace/networking-oss-deployments/environments/${1}" ]]; then
+  if [[ "$(lookup_env ${1})" = "${HOME}/workspace/networking-oss-deployments/environments/${1}" ]]; then
     workspace="routing"
   fi
 
@@ -528,13 +526,6 @@ function gke_target() {
 
 lookup_env() {
   local name=${1}
-
-  ls ~/workspace/deployments-routing/$1/bbl-state > /dev/null 2>&1
-  exit_code=$?
-  if [[ $exit_code -eq 0 ]]; then
-    echo "${HOME}/workspace/deployments-routing/$1/bbl-state"
-    return
-  fi
 
   ls ~/workspace/networking-oss-deployments/environments/$1/bbl-state > /dev/null 2>&1
   exit_code=$?
@@ -715,9 +706,6 @@ function pull_if_no_dirty_changes(){
 
 function good_morning(){
   echo "Pulling all the repos..."
-
-  # Deployments Routing:  Pipelines, environment info, helpful scripts
-  pull_if_no_dirty_changes "${HOME}/workspace/deployments-routing"
 
   # CF Networking Deployments: Private manifests and credentials for C2C CI
   pull_if_no_dirty_changes "${HOME}/workspace/cf-networking-deployments"
