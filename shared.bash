@@ -473,21 +473,6 @@ gobosh_target() {
   fi
 
   export BOSH_ENV=$1
-  if [ "$BOSH_ENV" = "local" ] || [ "$BOSH_ENV" = "lite" ]; then
-    gobosh_target_lite
-    return
-  fi
-
-  if [[ "${BOSH_ENV}" == "ci" ]]; then
-    pushd $(mktemp -d) > /dev/null
-      gsutil cp gs://c2c-bbl-states/ci ci.tgz
-      tar xf ci.tgz
-      eval "$(bbl print-env)"
-    popd > /dev/null
-    export BOSH_DEPLOYMENT="concourse"
-    return
-  fi
-
   export BOSH_DIR="$(lookup_env $BOSH_ENV)"
 
   changes="$(git -C ${BOSH_DIR} status --porcelain)"
@@ -564,12 +549,6 @@ gobosh_build_manifest() {
   bosh -d cf build-manifest -l=$BOSH_DIR/deployment-env-vars.yml --var-errs ~/workspace/cf-deployment/cf-deployment.yml
 }
 
-gobosh_patch_manifest() {
-  pushd ~/workspace/cf-deployment 1>/dev/null
-    git apply ../cf-networking-ci/netman-cf-deployment.patch
-  popd 1>/dev/null
-}
-
 extract_manifest() {
   bosh task $1 --debug | deployment-extractor
 }
@@ -582,16 +561,6 @@ upload_bosh_stemcell() {
   STEMCELL_VERSION="$(bosh int ~/workspace/cf-deployment/cf-deployment.yml --path=/stemcells/0/version)"
   echo "will upload stemcell ${STEMCELL_VERSION}"
   bosh -e vbox upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}"
-}
-
-gobosh_deploy() {
-  bosh deploy -n ~/workspace/cf-deployment/cf-deployment.yml \
-  -o ~/workspace/cf-deployment/operations/use-compiled-releases.yml \
-  -o ~/workspace/cf-networking-release/manifest-generation/opsfiles/cf-networking.yml \
-  -o ~/workspace/cf-networking-release/manifest-generation/opsfiles/use-latest.yml \
-  -o $BOSH_DIR/opsfile.yml \
-  --vars-store $BOSH_DIR/vars-store.yml \
-  -v system_domain=$(echo "${BOSH_DIR}" | cut -f 7 -d '/').c2c.cf-app.com
 }
 
 function windows_port_forward() {
@@ -690,9 +659,6 @@ function good_morning(){
 
   # Routing API CLI: Used to interact with the Routing API, which can be found in Routing Release
   pull_if_no_dirty_changes "${GOPATH}/src/code.cloudfoundry.org/routing-api-cli"
-
-  # CF Networking CI: the DEPRECATED CI repo for Container Networking Release CI
-  pull_if_no_dirty_changes "${HOME}/workspace/cf-networking-ci"
 
   # Toque Scaling: Scaling tests in the C2c CI
   pull_if_no_dirty_changes "${HOME}/workspace/toque-scaling"
