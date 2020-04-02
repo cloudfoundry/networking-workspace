@@ -528,12 +528,6 @@ function gke_target() {
 
 lookup_env() {
   local name=${1}
-  ls ~/workspace/pcf-networking-deployments/environments/${1} > /dev/null 2>&1
-  exit_code=${?}
-  if [[ $exit_code -eq 0 ]]; then
-    echo "${HOME}/workspace/pcf-networking-deployments/environments/$1"
-    return
-  fi
 
   ls ~/workspace/deployments-routing/$1/bbl-state > /dev/null 2>&1
   exit_code=$?
