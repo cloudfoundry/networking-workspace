@@ -440,10 +440,7 @@ cf_target() {
     return
   fi
 
-  if [ "$env" = "local" ] || [ "$env" = "lite" ]; then
-    password=$(grep cf_admin_password "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
-    uaa_password=$(grep uaa_admin_client_secret "${HOME}/workspace/cf-networking-deployments/environments/${env}/deployment-vars.yml" | cut -d" " -f2)
-  elif [ -f "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json" ]; then
+  if [ -f "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json" ]; then
     password=$(jq -r '.admin_password' < "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json")
   else
     password=$(credhub get -n "/bosh-${env}/cf/cf_admin_password" | bosh int --path /value -)
@@ -538,13 +535,6 @@ lookup_env() {
   exit_code=$?
   if [[ $exit_code -eq 0 ]]; then
     echo "${HOME}/workspace/networking-oss-deployments/environments/$1"
-    return
-  fi
-
-  ls ~/workspace/cf-networking-deployments/environments/$1 > /dev/null 2>&1
-  exit_code=$?
-  if [[ $exit_code -eq 0 ]]; then
-    echo "${HOME}/workspace/cf-networking-deployments/environments/$1"
     return
   fi
 }
@@ -706,9 +696,6 @@ function pull_if_no_dirty_changes(){
 
 function good_morning(){
   echo "Pulling all the repos..."
-
-  # CF Networking Deployments: Private manifests and credentials for C2C CI
-  pull_if_no_dirty_changes "${HOME}/workspace/cf-networking-deployments"
 
   # Routing Datadog Config: Configure your Data 🐶
   pull_if_no_dirty_changes "${HOME}/workspace/routing-datadog-config"
