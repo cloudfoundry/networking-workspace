@@ -423,7 +423,6 @@ function target-smith-deployment() {
   echo "Making smith-bosh alias"
   alias smith-bosh="smith -e ${smith_env} bosh -- -d ${d}"
 }
-# NEEDS CONSOLIDATION WITH ROUTING SCRIPTS
 
 cf_target() {
   if [ $# = 0 ]; then
@@ -449,16 +448,11 @@ cf_target() {
 
   [ -f "${HOME}/workspace/networking-oss-deployments/environments/${1}/cats_integration_config.json" ] && workspace="cf-k8s" || workspace="routing"
 
-  if [[ "$(lookup_env ${1})" = "${HOME}/workspace/networking-oss-deployments/environments/${1}" ]]; then
-    workspace="routing"
-  fi
-
-  if [ "$workspace" = "routing" ]; then
-    system_domain="${env}.routing.cf-app.com"
-  elif [ "$env" = "local" ] || [ "$env" = "lite" ]; then
-    system_domain="bosh-lite.com"
-  else
+  if [ "$env" = "pickelhelm" ] || [ "$env" = "toque" ] || [ "$env" = "mitre" ] || [ "$env" = "caubeen" ]; then
+    # we don't make c2c envs anymore. Everything else should use the routing domain.
     system_domain="${env}.c2c.cf-app.com"
+  else
+    system_domain="${env}.routing.cf-app.com"
   fi
 
   cf api "api.${system_domain}" --skip-ssl-validation
@@ -559,38 +553,11 @@ target() {
   gke_target "${@}"
 }
 
-gobosh_target_lite() {
-  gobosh_untarget
-
-  export BOSH_DIR=~/workspace/cf-networking-deployments/environments/local
-
-  pushd $BOSH_DIR >/dev/null
-    export BOSH_CLIENT="admin"
-    export BOSH_CLIENT_SECRET="$(bosh int ./creds.yml --path /admin_password)"
-    export BOSH_ENVIRONMENT="vbox"
-    export BOSH_CA_CERT=/tmp/bosh-lite-ca-cert
-    bosh int ./creds.yml --path /director_ssl/ca > $BOSH_CA_CERT
-  popd 1>/dev/null
-  unset BOSH_ALL_PROXY
-
-  export BOSH_DEPLOYMENT=cf;
-  if [ "$env" = "ci" ]; then
-    export BOSH_DEPLOYMENT=concourse
-  fi
-}
-
 readd_local_route() {
   ips="10.244.0.0/16"
   gw="192.168.50.6"
   sudo route delete -net "$ips" "$gw"
   sudo route add -net "$ips" "$gw"
-}
-
-ssh_bosh_lite_director() {
-  local creds=~/workspace/cf-networking-deployments/environments/local/creds.yml
-  bosh int $creds --path /jumpbox_ssh/private_key > /tmp/jumpbox.key
-  chmod 600 /tmp/jumpbox.key
-  ssh jumpbox@192.168.50.6 -i /tmp/jumpbox.key
 }
 
 gobosh_build_manifest() {
@@ -615,18 +582,6 @@ upload_bosh_stemcell() {
   STEMCELL_VERSION="$(bosh int ~/workspace/cf-deployment/cf-deployment.yml --path=/stemcells/0/version)"
   echo "will upload stemcell ${STEMCELL_VERSION}"
   bosh -e vbox upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}"
-}
-
-deploy_bosh_lite() {
-  bosh deploy --no-redact -n ~/workspace/cf-deployment/cf-deployment.yml \
-  -o ~/workspace/cf-deployment/operations/bosh-lite.yml \
-  -o ~/workspace/cf-networking-deployments/environments/local/instance-count-overrides.yml \
-  -o ~/workspace/cf-deployment/operations/enable-service-discovery.yml \
-  -o ~/workspace/cf-networking-release/manifest-generation/opsfiles/use-latest.yml \
-  -o ~/workspace/silk-release/opsfiles/use-latest.yml \
-  -o $BOSH_DIR/opsfile.yml \
-  --vars-store ~/workspace/cf-networking-deployments/environments/local/deployment-vars.yml \
-  -v system_domain=bosh-lite.com
 }
 
 gobosh_deploy() {
