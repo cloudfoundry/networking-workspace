@@ -61,6 +61,9 @@ main() {
     export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin:/usr/local/kubebuilder/bin
     export PATH="$(brew --prefix findutils)/libexec/gnubin:$PATH";
     export EDITOR=nvim
+
+    # mac os catalina plz don't complain about bash
+    export BASH_SILENCE_DEPRECATION_WARNING=1
   }
 
   setup_rbenv() {
