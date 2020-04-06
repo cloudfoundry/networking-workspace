@@ -1,34 +1,32 @@
 authors:
-  ac: Angela Chin; achin
   ad: Amelia Downs; adowns
-  ao: Aidan Obley; aobley
   as: Alex Standke; astandke
-  br: Bruce Ricard; bricard
   ca: Christian Ang; cang
-  cb: Christopher Brown; cbrown
   ck: Clay Kauzlaric; ckauzlaric
-  dm: David McClure; dmcclure
-  ew: Eli Wrenn; ewrenn
-  ex: Edwin Xie; exie
   gr: Gabe Rosenhouse; grosenhouse
-  js: Jen Spinney; jspinney
   jr: Josh Russett; jrussett
   kds: Kauana dos Santos; kdossantos
   mm: Mikael Manukyan; mmanukyan
+  td: Tim Downey; tdowney
+
+  br: Bruce Ricard; bricard
+  cb: Christopher Brown; cbrown
+  dm: David McClure; dmcclure
+  ew: Eli Wrenn; ewrenn
+  ex: Edwin Xie; exie
+  js: Jen Spinney; jspinney
   nd: Nitya Dhanushkodi; ndhanushkodi
   rs: Rodolfo Sanchez; rsanchez
-  td: Tim Downey; tdowney
   uu: Utako Ueda; uueda
 email:
-  domain: pivotal.io
+  domain: vmware.com
 email_addresses:
-  ad: adowns@vmware.com
-  ao: aobley@vmware.com
-  as: astandke@vmware.com
-  ca: angc@vmware.com
-  ck: ckauzlaric@vmware.com
-  gr: grosenhouse@vmware.com
-  jr: jrussett@vmware.com
-  kds: kdossantos@vmware.com
-  mm: mmanukyan@vmware.com
-  td: tdowney@vmware.com
+  br: bricard@pivotal.io
+  cb: cbrown@pivotal.io
+  dm: dmcclure@pivotal.io
+  ew: ewrenn@pivotal.io
+  ex: exie@pivotal.io
+  js: jspinney@pivotal.io
+  nd: ndhanushkodi@pivotal.io
+  rs: rsanchez@pivotal.io
+  uu: uueda@pivotal.io
