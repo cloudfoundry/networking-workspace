@@ -1,32 +1,21 @@
 authors:
   ad: Amelia Downs; adowns
   as: Alex Standke; astandke
-  ca: Christian Ang; cang
+  ca: Christian Ang; angc
   ck: Clay Kauzlaric; ckauzlaric
   gr: Gabe Rosenhouse; grosenhouse
   jr: Josh Russett; jrussett
   kds: Kauana dos Santos; kdossantos
   mm: Mikael Manukyan; mmanukyan
   td: Tim Downey; tdowney
-
   br: Bruce Ricard; bricard
-  cb: Christopher Brown; cbrown
+  cb: Christopher Brown; chbrown
   dm: David McClure; dmcclure
   ew: Eli Wrenn; ewrenn
   ex: Edwin Xie; exie
   js: Jen Spinney; jspinney
   nd: Nitya Dhanushkodi; ndhanushkodi
-  rs: Rodolfo Sanchez; rsanchez
+  rs: Rodolfo Sanchez; srodolfo
   uu: Utako Ueda; uueda
 email:
   domain: vmware.com
-email_addresses:
-  br: bricard@pivotal.io
-  cb: cbrown@pivotal.io
-  dm: dmcclure@pivotal.io
-  ew: ewrenn@pivotal.io
-  ex: exie@pivotal.io
-  js: jspinney@pivotal.io
-  nd: ndhanushkodi@pivotal.io
-  rs: rsanchez@pivotal.io
-  uu: uueda@pivotal.io
