@@ -61,4 +61,5 @@
   ui = always
 [log]
   date = local
-
+[interactive]
+  diffFilter = diff-highlight
