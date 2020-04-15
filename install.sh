@@ -138,7 +138,8 @@ main() {
   setup_pivotal_ide_prefs
 
   echo "updating all git repos to use 'git co-author'"
-  export GIT_DUET_CO_AUTHORED_BY=0
+  git solo br # HACK: if not set to anything git duet fails in the following commands
+  export GIT_DUET_CO_AUTHORED_BY=1
   find ~/workspace/ -type d -name '.git' -exec sh -c 'cd {} && cd .. && git duet > /dev/null && git init' \;
 
   cp smith-token-hook.sh ~/.smith-token-hook.sh
