@@ -8,10 +8,9 @@ authors:
   kds: Kauana dos Santos; kdossantos
   mm: Mikael Manukyan; mmanukyan
   td: Tim Downey; tdowney
-  br: Bruce Ricard; bricard
+  br: git duet init; gitinit
   cb: Christopher Brown; chbrown
   dm: David McClure; dmcclure
-  ew: Eli Wrenn; ewrenn
   ex: Edwin Xie; exie
   js: Jen Spinney; jspinney
   nd: Nitya Dhanushkodi; ndhanushkodi
@@ -21,9 +20,7 @@ authors:
 email:
   domain: vmware.com
 email_addresses:
-  br: bricard@pivotal.io
   cb: cbrown@pivotal.io
-  ew: ewrenn@pivotal.io
   ex: exie@pivotal.io
   js: jspinney@pivotal.io
   nd: ndhanushkodi@pivotal.io
