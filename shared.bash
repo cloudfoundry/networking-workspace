@@ -59,7 +59,7 @@ main() {
 
     # setup path
     export PATH=$GOPATH/bin:$PATH:/usr/local/go/bin:$HOME/scripts:/usr/ocal/opt/apr/bin:/usr/local/opt/apr-util/bin:/usr/local/sbin:/usr/local/kubebuilder/bin
-    export PATH="$(brew --prefix findutils)/libexec/gnubin:$PATH";
+    export PATH="/usr/local/opt/libexec/gnubin:$PATH";
     export EDITOR=nvim
 
     # mac os catalina plz don't complain about bash
@@ -370,6 +370,14 @@ function server() { # Create webserver from current directory
   ifconfig | grep "inet.*netmask" | sed "s/inet \(.*\) netmask.*/http:\/\/\1:$port\//g"
   sleep 1 && open "http://localhost:${port}/" &
   docker run -p $port:80 -v $(pwd):/usr/share/nginx/html jrelva/nginx-autoindex
+}
+
+function mdserve() {
+  local port="${1:-8000}";
+  echo "Links to give out:"
+  ifconfig | grep "inet.*netmask" | sed "s/inet \(.*\) netmask.*/http:\/\/\1:$port\//g"
+  sleep 1 && open "http://localhost:${port}/" &
+  docker run --rm -p $port:8080 -v $(pwd):/app/contents titpetric/pendulum
 }
 
 function nuke() { # Straight up murders all processes matching first arg
