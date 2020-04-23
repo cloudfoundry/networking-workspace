@@ -197,7 +197,6 @@ RUN bash -c ". $HOME/.asdf/asdf.sh \
  && go get github.com/onsi/gomega \
  && go get github.com/maxbrunsfeld/counterfeiter/v6 \
  && go get github.com/kkallday/deployment-extractor \
- && go get github.com/sourcegraph/go-langserver \
  && go get sigs.k8s.io/kind@v0.7.0"
 
 RUN mkdir -pv $HOME/setup \
