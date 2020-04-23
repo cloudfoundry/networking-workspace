@@ -16,3 +16,7 @@ targets:
   cf-mesh-p:
     api: https://ci.networking.family/
     team: cf-mesh
+
+  cf-k8s:
+    api: https://networking.ci.cf-app.com/
+    team: cf-k8s
