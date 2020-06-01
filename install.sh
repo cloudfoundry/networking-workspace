@@ -109,9 +109,6 @@ main() {
     echo ".flyrc file present, not overwriting"
   fi
 
-  echo "Configuring Spectacle..."
-  cp -f "$(pwd)/com.divisiblebyzero.Spectacle.plist" "${HOME}/Library/Preferences/"
-
   echo "Setting keyboard repeat rates..."
   defaults write -g InitialKeyRepeat -int 25 # normal minimum is 15 (225 ms)
   defaults write -g KeyRepeat -int 2 # normal minimum is 2 (30 ms)
