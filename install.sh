@@ -140,7 +140,7 @@ main() {
   find ~/workspace/ -type d -name '.git' -exec sh -c 'cd {} && cd .. && git duet > /dev/null && git init' \;
 
   cp smith-token-hook.sh ~/.smith-token-hook.sh
-  cp smith-notes-hook.sh ~/.smith-notes.sh
+  cp smith-notes-hook.sh ~/.smith-notes-hook.sh
 
   echo "Workstation setup complete — open a new window to apply all settings! 🌈"
 }
