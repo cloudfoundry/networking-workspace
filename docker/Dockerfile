@@ -115,29 +115,19 @@ RUN add-apt-repository -y ppa:dwmw2/openconnect \
 COPY pks-linux-amd64-1.7.0-build.417 /usr/local/bin/pks
 COPY smith_linux_amd64.tar.gz /tmp/smith.tar.gz
 
-RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.2.1/bosh-cli-6.2.1-linux-amd64 \
+RUN wget -O /usr/local/bin/bosh https://github.com/cloudfoundry/bosh-cli/releases/download/v6.3.0/bosh-cli-6.3.0-linux-amd64 \
  && wget -O /usr/local/bin/bbl https://github.com/cloudfoundry/bosh-bootloader/releases/download/v8.4.0/bbl-v8.4.0_linux_x86-64 \
- && wget -O /usr/local/bin/om https://github.com/pivotal-cf/om/releases/download/4.6.0/om-linux-4.6.0 \
- && wget -O /usr/local/bin/pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v1.0.1/pivnet-linux-amd64-1.0.1 \
+ && wget -O /usr/local/bin/om https://github.com/pivotal-cf/om/releases/download/5.0.0/om-linux-5.0.0 \
+ && wget -O /usr/local/bin/pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v1.0.4/pivnet-linux-amd64-1.0.4 \
  && wget -O /tmp/credhub.tgz https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.7.0/credhub-linux-2.7.0.tgz \
- && wget -O /tmp/codeserver.tar.gz https://github.com/cdr/code-server/releases/download/3.0.1/code-server-3.0.1-linux-x86_64.tar.gz \
+ && wget -O /tmp/codeserver.deb https://github.com/cdr/code-server/releases/download/v3.4.1/code-server_3.4.1_amd64.deb \
  && wget -O /tmp/kubebuilder.tar.gz https://github.com/kubernetes-sigs/kubebuilder/releases/download/v2.3.1/kubebuilder_2.3.1_linux_amd64.tar.gz \
  && tar -xzf /tmp/credhub.tgz -C /tmp && mv /tmp/credhub /usr/local/bin/credhub \
- && tar -xzf /tmp/codeserver.tar.gz -C /tmp && mv /tmp/code*/code-server /usr/local/bin/code-server \
+ && dpkg -i /tmp/codeserver.deb \
  && tar -xzf /tmp/kubebuilder.tar.gz -C /tmp && mv /tmp/kubebuilder*/bin/kubebuilder /usr/local/bin/kubebuilder \
  && tar -xzf /tmp/smith.tar.gz -C /tmp && mv /tmp/smith /usr/local/bin/smith \
  && chmod +x /usr/local/bin/pks /usr/local/bin/bosh /usr/local/bin/bbl /usr/local/bin/om /usr/local/bin/pivnet \
- && chmod +x /usr/local/bin/credhub /usr/local/bin/code-server /usr/local/bin/kubebuilder /usr/local/bin/smith \
- && rm -rf /tmp/*
-
-# Additional nvim dependencies
-RUN wget -O /tmp/ripgrep.deb https://github.com/BurntSushi/ripgrep/releases/download/12.0.1/ripgrep_12.0.1_amd64.deb \
- && wget -O /tmp/fd-musl.deb https://github.com/sharkdp/fd/releases/download/v7.5.0/fd-musl_7.5.0_amd64.deb \
- && apt install /tmp/ripgrep.deb /tmp/fd-musl.deb \
- && apt-get -qy autoremove \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/* \
- && ln -s /home/pivotal/vimfs-root/usr/bin/nvim /usr/local/bin/nvim \
+ && chmod +x /usr/local/bin/credhub /usr/local/bin/kubebuilder /usr/local/bin/smith \
  && rm -rf /tmp/*
 
 # Enable the SSH server on the container
@@ -156,29 +146,11 @@ USER pivotal
 WORKDIR /home/pivotal
 ENV HOME /home/pivotal
 
-COPY tool-versions $HOME/.tool-versions
+RUN mkdir -pv $HOME/setup
 
-RUN bash -c ". $HOME/.asdf/asdf.sh \
- && asdf plugin-add adr-tools \
- && asdf plugin-add cf \
- && asdf plugin-add concourse \
- && asdf plugin-add dep \
- && asdf plugin-add eksctl \
- && asdf plugin-add golang \
- && asdf plugin-add helm \
- && asdf plugin-add istioctl \
- && asdf plugin-add kubectl \
- && asdf plugin-add nodejs \
- && bash /home/pivotal/.asdf/plugins/nodejs/bin/import-release-team-keyring \
- && asdf plugin-add packer \
- && asdf plugin-add protoc \
- && asdf plugin-add ruby \
- && asdf plugin-add shellcheck \
- && asdf plugin-add sqlite \
- && asdf plugin-add terraform \
- && asdf plugin-add yarn \
- && cd $HOME && asdf install \
- && rm -rf /tmp/*"
+COPY asdf-install.sh $HOME/setup/asdf-install.sh
+
+RUN bash $HOME/setup/asdf-install.sh
 
 ENV GOPATH=$HOME/go
 
@@ -199,8 +171,7 @@ RUN bash -c ". $HOME/.asdf/asdf.sh \
  && go get github.com/kkallday/deployment-extractor \
  && go get sigs.k8s.io/kind@v0.7.0"
 
-RUN mkdir -pv $HOME/setup \
- && cd $HOME/setup \
+RUN cd $HOME/setup \
  && git clone https://github.com/cloudfoundry/networking-workspace \
  && cd networking-workspace \
  && ln -sf $(pwd)/git-authors $HOME/.git-authors \
@@ -218,11 +189,6 @@ RUN cd $HOME/setup \
 
 ENV NETWORKING_WORKSPACE /home/pivotal/setup/networking-workspace
 
-RUN wget -O /tmp/nvim.appimage https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage \
- && chmod u+x /tmp/nvim.appimage && /tmp/nvim.appimage --appimage-extract \
- && mv $HOME/squashfs-root $HOME/vimfs-root \
- && rm -rf /tmp/*
-
 RUN mkdir -pv $HOME/.config \
  && git clone https://github.com/luan/nvim $HOME/.config/nvim \
  && mkdir -p $HOME/.config/nvim/user \
@@ -238,7 +204,10 @@ RUN mkdir -pv $HOME/.ssh \
  && cp $NETWORKING_WORKSPACE/ssh_config $HOME/.ssh/config \
  && ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
-RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1
+RUN git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt --depth=1 \
+ && wget -O $HOME/scripts/diff-highlight \
+   https://raw.githubusercontent.com/git/git/d5cb9cbd64165153a318e1049f8bf14b09a16b11/contrib/diff-highlight/diff-highlight \
+ && chmod +x $HOME/scripts/diff-highlight
 
 ENV SSH_AUTH_SOCK=/tmp/.ssh-auth-sock
 LABEL com.ensody.ssh-agent-inject=

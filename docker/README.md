@@ -60,6 +60,12 @@ host network.
   instructions. The login process is kind of finicky so you might have to try
   again or use Biometric authentication.
 
+### Connecting to container's VPN from remote
+  In the container, create a SOCKS5 proxy by running `ssh -D 0.0.0.0:4568 pivotal@localhost`.
+  If you've used the `./start-container.sh`, port 4568 should be forwarded by
+  docker. In this case, you can now use `localhost:4568` as a SOCKS5 proxy. This
+  proxy should now give you access to what is accessible by the VPN.
+
 ### VS Code
   Run `code-server --port 4567` and use VS Code at `localhost:4567`
 
