@@ -31,14 +31,12 @@ host network.
 - VPN support
 - Secrets of the shared.bash without breaking your machine
 - code-server
-- SSH agent forwarding for Linux-based hosts
+- SSH agent forwarding
 
 ## Known Issues:
 
 - There might be some weird errors for Vim or Tmux
    - They don't seem to affect anything
-- SSH agent forwarding doesn't work on Mac OSX
-  - This is because OSX does not allow bind mounts to the SSH auth sock for some reason
 - VPN access does not support alternative TFA methods
   - Currently there isn't a method of getting an OAuth token from Okta if we
     use the Browser-based flow
