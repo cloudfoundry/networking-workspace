@@ -21,6 +21,5 @@ email:
   domain: vmware.com
 email_addresses:
   cb: cbrown@pivotal.io
-  rs: rsanchez@pivotal.io
   uu: uueda@pivotal.io
   lh: lhanson@pivotal.io
