@@ -225,7 +225,7 @@ if [[ -n ${SAVE_ALIAS} ]]; then
 fi
 
 /usr/bin/ssh-add -D
-/usr/bin/ssh-add -t "${HOURS}H" - <<< "${KEY}"
+/usr/bin/ssh-add -t "${HOURS}H" <(echo "${KEY}")
 echo "Identity added for ${HOURS} hours"
 
 unset KEY
