@@ -849,5 +849,9 @@ function smith_target() {
   )
 }
 
+function gssh() {
+  gcloud compute ssh --zone us-central1-a  --project cf-routing pivotal@$1
+}
+
 source $HOME/workspace/networking-workspace/custom-commands.sh
 
