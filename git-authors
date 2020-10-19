@@ -1,22 +1,22 @@
 authors:
   ad: Amelia Downs; adowns
   as: Alex Standke; astandke
-  ca: Christian Ang; angc
-  ck: Clay Kauzlaric; ckauzlaric
-  gr: Gabe Rosenhouse; grosenhouse
-  jr: Josh Russett; jrussett
-  kds: Kauana dos Santos; kdossantos
-  mm: Mikael Manukyan; mmanukyan
   br: git duet init; gitinit
+  ca: Christian Ang; angc
   cb: Christopher Brown; chbrown
+  ck: Clay Kauzlaric; ckauzlaric
   dm: David McClure; dmcclure
   ex: Edwin Xie; exie
+  gk: Gandharv Kapoor; kapoorg
+  gr: Gabe Rosenhouse; grosenhouse
+  jm: Jamie Monserrate; monserratej
+  jr: Josh Russett; jrussett
+  kds: Kauana dos Santos; kdossantos
+  lh: Leah Hanson; astrieanna
+  mm: Mikael Manukyan; mmanukyan
   nd: Nitya Dhanushkodi; ndhanushkodi
   rs: Rodolfo Sanchez; srodolfo
   uu: Utako Ueda; uueda
-  lh: Leah Hanson; astrieanna
-  jm: Jamie Monserrate; monserratej
-  rh: Ryan Hall; hallr
 email:
   domain: vmware.com
 email_addresses:
