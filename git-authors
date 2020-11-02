@@ -1,11 +1,10 @@
 authors:
   ad: Amelia Downs; adowns
+  aj: Amin Jamali; ajamali
   as: Alex Standke; astandke
   br: git duet init; gitinit
   ca: Christian Ang; angc
-  cb: Christopher Brown; chbrown
   ck: Clay Kauzlaric; ckauzlaric
-  dm: David McClure; dmcclure
   ex: Edwin Xie; exie
   gk: Gandharv Kapoor; kapoorg
   gr: Gabe Rosenhouse; grosenhouse
@@ -15,10 +14,8 @@ authors:
   lh: Leah Hanson; astrieanna
   mm: Mikael Manukyan; mmanukyan
   rs: Rodolfo Sanchez; srodolfo
-  uu: Utako Ueda; uueda
 email:
   domain: vmware.com
 email_addresses:
-  cb: cbrown@pivotal.io
-  uu: uueda@pivotal.io
+  aj: ajamali@pivotal.io
   lh: lhanson@pivotal.io
